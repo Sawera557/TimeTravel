@@ -1,0 +1,176 @@
+{
+  "tasks": [
+    {
+      "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+      "title": "Dashboard Design",
+      "parent_id": null,
+      "status": "in_progress",
+      "created_at": "2026-04-17T14:59:31.002625+00:00",
+      "updated_at": "2026-04-17T15:07:48.300633+00:00"
+    },
+    {
+      "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+      "title": "Loom video",
+      "parent_id": null,
+      "status": "todo",
+      "created_at": "2026-04-17T14:59:40.686760+00:00",
+      "updated_at": "2026-04-17T14:59:40.686760+00:00"
+    },
+    {
+      "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+      "title": "Front-end UI Builder",
+      "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+      "status": "in_progress",
+      "created_at": "2026-04-17T15:10:51.818313+00:00",
+      "updated_at": "2026-04-17T15:10:51.818313+00:00"
+    },
+    {
+      "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+      "title": "Backend Api systems",
+      "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+      "status": "in_progress",
+      "created_at": "2026-04-17T15:15:11.276156+00:00",
+      "updated_at": "2026-04-17T15:15:11.276156+00:00"
+    }
+  ],
+  "history": [
+    {
+      "id": "0bb5e137-87b1-471b-8ac3-275f401002fc",
+      "label": "Workspace initialized",
+      "created_at": "2026-04-17T14:59:13.660642+00:00",
+      "tasks": []
+    },
+    {
+      "id": "5acd7121-b2ca-4896-a9a7-1f2cbdeb357c",
+      "label": "Created 'Dashboard Design'",
+      "created_at": "2026-04-17T14:59:31.002625+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T14:59:31.002625+00:00"
+        }
+      ]
+    },
+    {
+      "id": "34236a4c-1a24-4943-8d92-31a915f8a0c8",
+      "label": "Created 'Loom video'",
+      "created_at": "2026-04-17T14:59:40.686760+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T14:59:31.002625+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        }
+      ]
+    },
+    {
+      "id": "37c3d52b-bfcc-4b3c-a873-b071e3325a8a",
+      "label": "Updated 'Dashboard Design'",
+      "created_at": "2026-04-17T15:07:48.300633+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        }
+      ]
+    },
+    {
+      "id": "51353acd-6256-43af-988b-017325a64b28",
+      "label": "Created 'Front-end UI Builder'",
+      "created_at": "2026-04-17T15:10:51.818313+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        }
+      ]
+    },
+    {
+      "id": "1a413126-6e29-49aa-b137-792eb47518ed",
+      "label": "Created 'Backend Api systems'",
+      "created_at": "2026-04-17T15:15:11.276156+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        }
+      ]
+    }
+  ],
+  "current_index": 5
+}

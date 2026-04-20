@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronicle Tasks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<div class="app-shell">
+    <header class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">AI-First Technical Assessment</p>
+            <h1>Time-Travel</h1>
+            <h3>Collaborative Task Manager</h3>
+
+            <p class="hero-text">
+                A polished workspace for modeling parent-child dependencies, editing tasks live, and navigating state
+                history without corrupting the graph.
+            </p>
+        </div>
+        <div class="hero-stats">
+            <article class="stat-card">
+                <span class="stat-label">Total Tasks</span>
+                <strong id="stat-total">0</strong>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Root Tasks</span>
+                <strong id="stat-root">0</strong>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Children</span>
+                <strong id="stat-children">0</strong>
+            </article>
+            <article class="stat-card accent">
+                <span class="stat-label">Snapshot</span>
+                <strong id="stat-snapshot">0 / 0</strong>
+            </article>
+        </div>
+    </header>
+
+    <main class="workspace">
+        <aside class="panel panel-left">
+            <section class="module">
+                <div class="module-heading">
+                    <p class="eyebrow">Composer</p>
+                    <h2>Create Task</h2>
+                </div>
+                <form id="create-form" class="stack">
+                    <label class="field">
+                        <span>Task Title</span>
+                        <input id="task-title" name="title" type="text" placeholder="Design API contract" required>
+                    </label>
+                    <label class="field">
+                        <span>Parent Task</span>
+                        <select id="task-parent" name="parent_id">
+                            <option value="">No parent (root task)</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Status</span>
+                        <select id="task-status" name="status">
+                            <option value="todo">To do</option>
+                            <option value="in_progress">In progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </label>
+                    <button class="primary-button" type="submit">Add Task</button>
+                </form>
+            </section>
+
+            <section class="module">
+                <div class="module-heading">
+                    <p class="eyebrow">Navigation</p>
+                    <h2>Time Travel</h2>
+                </div>
+                <div class="history-actions">
+                    <button id="undo-button" class="ghost-button" type="button">Undo</button>
+                    <button id="redo-button" class="ghost-button" type="button">Redo</button>
+                    <button id="reset-button" class="ghost-button danger" type="button">Reset</button>
+                </div>
+                <label class="timeline" for="history-slider">
+                    <span>Snapshot timeline</span>
+                    <input id="history-slider" type="range" min="0" max="0" value="0">
+                </label>
+                <div class="timeline-meta">
+                    <strong id="timeline-label">Workspace initialized</strong>
+                    <span id="timeline-time">No actions yet</span>
+                </div>
+                <ol id="history-list" class="history-list"></ol>
+            </section>
+        </aside>
+
+        <section class="panel panel-center">
+            <div class="module-heading">
+                <p class="eyebrow">Execution View</p>
+                <h2>Dependency Map</h2>
+            </div>
+            <div class="strategy-banner">
+                <span class="strategy-pill">Reconciliation Strategy</span>
+                <p>Undo and delete use <strong>cascade delete</strong>, so removing a parent removes all descendants and
+                    time-travel restores the entire subtree as one consistent snapshot.</p>
+            </div>
+            <div id="task-canvas" class="task-canvas"></div>
+        </section>
+
+        <aside class="panel panel-right">
+            <section class="module">
+                <div class="module-heading">
+                    <p class="eyebrow">Inspector</p>
+                    <h2>Selected Task</h2>
+                </div>
+                <div id="empty-inspector" class="empty-state">
+                    <p>Select a task card to edit its title, parent, or status.</p>
+                </div>
+                <form id="edit-form" class="stack hidden">
+                    <label class="field">
+                        <span>Title</span>
+                        <input id="edit-title" name="title" type="text" required>
+                    </label>
+                    <label class="field">
+                        <span>Parent</span>
+                        <select id="edit-parent" name="parent_id">
+                            <option value="">No parent (root task)</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Status</span>
+                        <select id="edit-status" name="status">
+                            <option value="todo">To do</option>
+                            <option value="in_progress">In progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </label>
+                    <div class="inspector-meta">
+                        <span id="inspector-created"></span>
+                        <span id="inspector-updated"></span>
+                    </div>
+                    <button class="primary-button" type="submit">Save Changes</button>
+                    <button id="delete-button" class="ghost-button danger" type="button">Delete Task</button>
+                </form>
+            </section>
+        </aside>
+    </main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
