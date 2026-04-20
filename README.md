@@ -1,4 +1,4 @@
-﻿# Chronicle Tasks
+# TimeTravel Tasks
 A professional task manager with time-travel functionality. Supports hierarchical tasks, undo/redo, and snapshot-based history navigation.
 ## Quick Start
 ### Prerequisites
@@ -13,14 +13,14 @@ python app.py
 `
 Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
 ## Features
-- ✅ Create hierarchical tasks (parent-child relationships)
-- ✅ Edit tasks inline (title, status, parent)
-- ✅ Delete tasks with cascade (removes all descendants)
-- ✅ Undo/Redo with full state restoration
-- ✅ Time-travel slider to jump between snapshots
-- ✅ History branching when editing from past states
-- ✅ Cycle prevention (no circular dependencies)
-- ✅ Real-time UI updates
+- ? Create hierarchical tasks (parent-child relationships)
+- ? Edit tasks inline (title, status, parent)
+- ? Delete tasks with cascade (removes all descendants)
+- ? Undo/Redo with full state restoration
+- ? Time-travel slider to jump between snapshots
+- ? History branching when editing from past states
+- ? Cycle prevention (no circular dependencies)
+- ? Real-time UI updates
 ## How to Use
 ### Create Tasks
 1. Enter title in left panel
@@ -36,7 +36,7 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
 - **Slider**: Drag to jump to any historical state
 - **History List**: Click any snapshot to jump directly
 ### Delete Tasks
-- Select task → Click "Delete Task"
+- Select task ? Click "Delete Task"
 - Automatically removes all child tasks (cascade delete)
 ## API Endpoints
 | Method | Endpoint | Description |
@@ -55,20 +55,20 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
 ## Project Structure
 `
 FlaskProject/
-├── app.py                 # Flask backend + business logic
-├── requirements.txt       # Python dependencies
-├── README.md             # This file
-├── DEPLOYMENT.md         # Vercel deployment guide
-├── ARCHITECTURE.md       # Technical concepts
-├── templates/
-│   └── index.html        # Single-page app template
-├── static/
-│   ├── css/
-│   │   └── app.css       # Professional styling
-│   └── js/
-│       └── app.js        # Frontend state management
-└── data/
-    └── task_state.json   # JSON persistence
++-- app.py                 # Flask backend + business logic
++-- requirements.txt       # Python dependencies
++-- README.md             # This file
++-- DEPLOYMENT.md         # Vercel deployment guide
++-- ARCHITECTURE.md       # Technical concepts
++-- templates/
+�   +-- index.html        # Single-page app template
++-- static/
+�   +-- css/
+�   �   +-- app.css       # Professional styling
+�   +-- js/
+�       +-- app.js        # Frontend state management
++-- data/
+    +-- task_state.json   # JSON persistence
 `
 ## Core Concepts
 ### State Management
@@ -115,3 +115,4 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for:
 - Performance considerations
 ## Deployment
 See [DEPLOYMENT.md](DEPLOYMENT.md) for Vercel deployment instructions.
+

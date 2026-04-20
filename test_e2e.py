@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-End-to-end test suite for the Chronicle Tasks application.
+End-to-end test suite for the TimeTravel Tasks application.
 Tests all core requirements:
 1. Task Management (Create, list, update tasks)
 2. Task Dependencies (Parent-child relationships)
@@ -74,7 +74,7 @@ def api_delete(endpoint: str) -> Dict[str, Any]:
 def main():
     """Run comprehensive test suite."""
     print("=" * 70)
-    print("CHRONICLE TASKS - END-TO-END TEST SUITE")
+    print("TimeTravel TASKS - END-TO-END TEST SUITE")
     print("=" * 70)
     print()
 
@@ -386,4 +386,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

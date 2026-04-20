@@ -1,5 +1,5 @@
-﻿# Chronicle Tasks - Technical Architecture
-This document explains the technical concepts, design decisions, and implementation details of the Chronicle Tasks application.
+# TimeTravel Tasks - Technical Architecture
+This document explains the technical concepts, design decisions, and implementation details of the TimeTravel Tasks application.
 ## Core Architecture
 ### State Management System
 The application uses a **snapshot-based state management** system that ensures data integrity and enables time-travel functionality.
@@ -96,8 +96,10 @@ const state = {
 - pi() - Fetch wrapper with error handling
 - 	askMap() - Efficient ID-to-task lookup
 - childMap() - Parent-to-children relationship mapping
-- enderTaskTree() - Recursive hierarchy rendering
-- enderHistory() - Timeline UI updates
+- 
+enderTaskTree() - Recursive hierarchy rendering
+- 
+enderHistory() - Timeline UI updates
 **Event Handling:**
 - Form submissions for create/edit
 - Button clicks for undo/redo/reset
@@ -274,10 +276,11 @@ python test_e2e.py
 python app.py  # Look for error messages
 `
 ### Conclusion
-The Chronicle Tasks application demonstrates a robust implementation of time-travel state management using snapshot-based architecture. The design prioritizes:
+The TimeTravel Tasks application demonstrates a robust implementation of time-travel state management using snapshot-based architecture. The design prioritizes:
 - **Data Integrity**: Immutable snapshots prevent corruption
 - **User Experience**: Intuitive undo/redo with full restoration
 - **Code Simplicity**: Clean separation of concerns
 - **Testability**: Comprehensive test coverage
 - **Scalability**: Foundation for future enhancements
 The current JSON file storage works perfectly for the assessment requirements while providing a solid foundation for database migration when needed for production deployment.
+

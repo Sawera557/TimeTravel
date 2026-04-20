@@ -1,4 +1,4 @@
-﻿# Deploy Chronicle Tasks to Vercel
+# Deploy TimeTravel Tasks to Vercel
 This guide shows how to deploy the Flask task manager to Vercel for free hosting.
 ## Prerequisites
 - Vercel account (free)
@@ -86,20 +86,20 @@ FLASK_ENV=production
 Your project should look like this:
 `
 FlaskProject/
-├── api/
-│   └── app.py              # Modified Flask app
-├── static/
-│   ├── css/
-│   │   └── app.css
-│   └── js/
-│       └── app.js
-├── templates/
-│   └── index.html
-├── data/
-│   └── task_state.json     # Will be created
-├── vercel.json             # Vercel config
-├── requirements.txt
-└── README.md
++-- api/
+�   +-- app.py              # Modified Flask app
++-- static/
+�   +-- css/
+�   �   +-- app.css
+�   +-- js/
+�       +-- app.js
++-- templates/
+�   +-- index.html
++-- data/
+�   +-- task_state.json     # Will be created
++-- vercel.json             # Vercel config
++-- requirements.txt
++-- README.md
 `
 ## Step 5: Modify app.py for Vercel
 Update your pp.py (now pi/app.py) for Vercel:
@@ -176,3 +176,4 @@ For persistent data, combine Vercel with Supabase:
 3. Configure CI/CD
 4. Add error tracking
 5. Set up monitoring alerts
+
