@@ -1,4 +1,5 @@
 ﻿import os
+import logging
 from supabase import create_client, Client
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -9,13 +10,32 @@ from typing import Any
 from uuid import uuid4
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
+
+# Configure logging for production
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
 CORS(app)
+
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_ANON_KEY = os.getenv('SUPABASE_ANON_KEY')
+
 # Initialize Supabase client
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY) if SUPABASE_URL and SUPABASE_ANON_KEY else None
+supabase: Client = None
+if SUPABASE_URL and SUPABASE_ANON_KEY:
+    try:
+        supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+        logger.info("✓ Supabase client initialized successfully")
+    except Exception as e:
+        logger.error(f"✗ Failed to initialize Supabase client: {e}")
+        supabase = None
+else:
+    logger.warning("⚠ Supabase credentials not found. Using local file storage only.")
 # Fallback to file storage for local development
 STORE_PATH = Path(__file__).with_name('data').joinpath('task_state.json')
 LOCK = RLock()
@@ -45,15 +65,17 @@ class SupabaseStore:
                 # Get current workspace state
                 workspace_response = supabase.table('workspace_state').select('*').eq('id', self.workspace_id).execute()
                 if not workspace_response.data:
-                    # Initialize if not exists
+                    logger.info(f"Workspace {self.workspace_id} not found in Supabase, initializing...")
                     return self._initialize_supabase()
                 workspace = workspace_response.data[0]
                 current_snapshot_id = workspace.get('current_snapshot_id')
                 if not current_snapshot_id:
+                    logger.warning(f"No current snapshot for workspace {self.workspace_id}, reinitializing...")
                     return self._initialize_supabase()
                 # Get current snapshot
                 snapshot_response = supabase.table('snapshots').select('*').eq('id', current_snapshot_id).execute()
                 if not snapshot_response.data:
+                    logger.error(f"Snapshot {current_snapshot_id} not found in Supabase")
                     return self._initialize_supabase()
                 current_snapshot = snapshot_response.data[0]
                 # Get all snapshots for history
@@ -71,16 +93,18 @@ class SupabaseStore:
                         current_index = i
                 # Get current tasks from snapshot
                 tasks = current_snapshot['tasks'] if isinstance(current_snapshot['tasks'], list) else json.loads(current_snapshot['tasks'])
+                logger.debug(f"Loaded {len(tasks)} tasks from Supabase")
                 return {
                     'tasks': tasks,
                     'history': history,
                     'current_index': current_index
                 }
             except Exception as e:
-                print(f'Error loading from Supabase: {e}')
-                # Fallback to file storage
+                logger.error(f'Error loading from Supabase: {e}', exc_info=True)
+                logger.info("Falling back to file storage")
                 return self._load_from_file()
         else:
+            logger.debug("Supabase not available, using file storage")
             return self._load_from_file()
     def _initialize_supabase(self) -> dict[str, Any]:
         '''Initialize Supabase with default state'''
@@ -107,13 +131,14 @@ class SupabaseStore:
                 'created_at': utc_now(),
                 'updated_at': utc_now()
             }).execute()
+            logger.info(f"✓ Supabase workspace {self.workspace_id} initialized")
             return {
                 'tasks': [],
                 'history': [initial_snapshot],
                 'current_index': 0
             }
         except Exception as e:
-            print(f'Error initializing Supabase: {e}')
+            logger.error(f'Error initializing Supabase: {e}', exc_info=True)
             return self._default_state()
     def _load_from_file(self) -> dict[str, Any]:
         '''Fallback file-based loading'''
@@ -143,6 +168,7 @@ class SupabaseStore:
                             'workspace_id': self.workspace_id
                         })
                     supabase.table('tasks').insert(tasks_data).execute()
+                    logger.debug(f"Saved {len(tasks_data)} tasks to Supabase")
                 # Update current snapshot pointer
                 if state['history'] and state['current_index'] < len(state['history']):
                     current_snapshot = state['history'][state['current_index']]
@@ -150,9 +176,10 @@ class SupabaseStore:
                         'current_snapshot_id': current_snapshot['id'],
                         'updated_at': utc_now()
                     }).eq('id', self.workspace_id).execute()
+                    logger.debug(f"Updated workspace state to snapshot {current_snapshot['id']}")
             except Exception as e:
-                print(f'Error saving to Supabase: {e}')
-                # Fallback to file storage
+                logger.error(f'Error saving to Supabase: {e}', exc_info=True)
+                logger.info("Falling back to file storage")
                 self._save_to_file(state)
         else:
             self._save_to_file(state)
@@ -187,8 +214,9 @@ class SupabaseStore:
                     'current_snapshot_id': snapshot['id'],
                     'updated_at': utc_now()
                 }).eq('id', self.workspace_id).execute()
+                logger.debug(f"✓ Snapshot created: {label}")
             except Exception as e:
-                print(f'Error saving snapshot to Supabase: {e}')
+                logger.error(f'Error saving snapshot to Supabase: {e}', exc_info=True)
         # Update local history
         history.append(snapshot)
         state['history'] = history
@@ -201,13 +229,15 @@ class SupabaseStore:
                 # Clear all data for this workspace
                 supabase.table('tasks').delete().eq('workspace_id', self.workspace_id).execute()
                 supabase.table('snapshots').delete().eq('workspace_id', self.workspace_id).execute()
+                logger.info(f"✓ Workspace {self.workspace_id} reset in Supabase")
                 # Re-initialize
                 return self._initialize_supabase()
             except Exception as e:
-                print(f'Error resetting Supabase: {e}')
+                logger.error(f'Error resetting Supabase: {e}', exc_info=True)
         # Fallback to file reset
         state = self._default_state()
         self._save_to_file(state)
+        logger.info("Workspace reset to file storage")
         return state
 # Initialize store
 store = SupabaseStore()
@@ -367,14 +397,19 @@ def create_task():
         parent_id = data.get('parent_id') or None
         status = data.get('status', 'todo')
         if not title:
+            logger.warning("Task creation attempt with empty title")
             return jsonify({'error': 'Title is required.'}), 400
         if status not in {'todo', 'in_progress', 'done'}:
+            logger.warning(f"Task creation attempt with invalid status: {status}")
             return jsonify({'error': 'Invalid status.'}), 400
         task = TaskManager.create_task(title, parent_id, status)
+        logger.info(f"✓ Task created: {task['id']}")
         return jsonify({'task': task}), 201
     except ValueError as exc:
+        logger.warning(f"Task creation validation error: {exc}")
         return jsonify({'error': str(exc)}), 400
     except Exception as exc:
+        logger.error(f"Task creation error: {exc}", exc_info=True)
         return jsonify({'error': str(exc)}), 500
 @app.route('/api/tasks/<task_id>', methods=['PATCH'])
 def update_task(task_id: str):
@@ -440,6 +475,11 @@ def initialize():
     return jsonify({'message': 'Workspace reset.', 'state': state}), 200
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'healthy'}), 200
+    status = {
+        'status': 'healthy',
+        'supabase': 'connected' if supabase else 'unavailable',
+        'storage': 'supabase' if supabase else 'file'
+    }
+    return jsonify(status), 200
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

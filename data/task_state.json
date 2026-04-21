@@ -55,6 +55,22 @@
       "status": "done",
       "created_at": "2026-04-21T12:39:42.399909+00:00",
       "updated_at": "2026-04-21T12:39:58.880162+00:00"
+    },
+    {
+      "id": "609fd798-14fd-4da6-bf14-384f51f4b56a",
+      "title": "Lambda Automations",
+      "parent_id": null,
+      "status": "todo",
+      "created_at": "2026-04-21T12:57:21.567047+00:00",
+      "updated_at": "2026-04-21T13:00:24.756271+00:00"
+    },
+    {
+      "id": "d6e7130b-20ba-4b1d-8288-e8c8b9b7e3bf",
+      "title": "UI UX Testing",
+      "parent_id": null,
+      "status": "todo",
+      "created_at": "2026-04-21T13:10:15.281398+00:00",
+      "updated_at": "2026-04-21T13:10:15.281398+00:00"
     }
   ],
   "history": [
@@ -545,7 +561,303 @@
         }
       ],
       "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "db12cf70-d967-4962-a77b-ecee9eba5f09",
+      "label": "Created 'Lambda Automations'",
+      "created_at": "2026-04-21T12:57:21.567047+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "done",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:58.880162+00:00"
+        },
+        {
+          "id": "609fd798-14fd-4da6-bf14-384f51f4b56a",
+          "title": "Lambda Automations",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:57:21.567047+00:00",
+          "updated_at": "2026-04-21T12:57:21.567047+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "46c83ab6-0f22-4972-9b80-e035ae3e741e",
+      "label": "Updated 'Lambda Automations'",
+      "created_at": "2026-04-21T12:57:51.076916+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "done",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:58.880162+00:00"
+        },
+        {
+          "id": "609fd798-14fd-4da6-bf14-384f51f4b56a",
+          "title": "Lambda Automations",
+          "parent_id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "status": "todo",
+          "created_at": "2026-04-21T12:57:21.567047+00:00",
+          "updated_at": "2026-04-21T12:57:51.076916+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "0358e3fd-ce1d-464e-9500-c7f0f464ff8e",
+      "label": "Updated 'Lambda Automations'",
+      "created_at": "2026-04-21T13:00:24.756271+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "done",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:58.880162+00:00"
+        },
+        {
+          "id": "609fd798-14fd-4da6-bf14-384f51f4b56a",
+          "title": "Lambda Automations",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:57:21.567047+00:00",
+          "updated_at": "2026-04-21T13:00:24.756271+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "b4a8f724-769a-48c8-8030-f716b514c556",
+      "label": "Created 'UI UX Testing'",
+      "created_at": "2026-04-21T13:10:15.281398+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "done",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:58.880162+00:00"
+        },
+        {
+          "id": "609fd798-14fd-4da6-bf14-384f51f4b56a",
+          "title": "Lambda Automations",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:57:21.567047+00:00",
+          "updated_at": "2026-04-21T13:00:24.756271+00:00"
+        },
+        {
+          "id": "d6e7130b-20ba-4b1d-8288-e8c8b9b7e3bf",
+          "title": "UI UX Testing",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T13:10:15.281398+00:00",
+          "updated_at": "2026-04-21T13:10:15.281398+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
     }
   ],
-  "current_index": 11
+  "current_index": 15
 }
