@@ -18,6 +18,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Load environment variables from .env file in development
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    logger.info("✓ Loaded environment variables from .env file")
+except ImportError:
+    logger.warning("⚠ python-dotenv not installed, using system environment variables only")
+
 app = Flask(__name__)
 CORS(app)
 
