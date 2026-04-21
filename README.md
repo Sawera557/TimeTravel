@@ -7,7 +7,7 @@ A simple task manager with undo/redo features. Create tasks, organize them in hi
 1. Install Python 3.10 or higher
 2. Install dependencies: `pip install flask flask-cors supabase`
 3. Set up Supabase (optional for data persistence)
-4. Run: `python app_supabase.py`
+4. Run: `python app.py`
 5. Open http://127.0.0.1:5000
 
 ## How to Use
@@ -66,7 +66,7 @@ This app lets you manage tasks with the ability to undo changes, like time trave
 
 - Install Python and dependencies
 - Set SUPABASE_URL and SUPABASE_ANON_KEY as environment variables
-- Run `python app_supabase.py`
+- Run `python app.py`
 
 ### Notes
 
@@ -76,8 +76,15 @@ This app lets you manage tasks with the ability to undo changes, like time trave
 
 ## Project Files
 
-- `app_supabase.py`: Main app
+- `app.py`: Main app with Supabase integration and production file system fixes
 - `requirements.txt`: Dependencies
 - `templates/index.html`: Web page
 - `static/`: CSS and JS files
-- `data/`: Local data storage
+- `data/`: Local data storage (development only)
+- `.env.example`: Environment configuration template
+
+## Production Notes
+
+- **File System**: Automatically uses `/tmp` in serverless environments (Vercel, AWS Lambda)
+- **Supabase Required**: Production deployments should use Supabase for data persistence
+- **Environment Variables**: Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` for production
