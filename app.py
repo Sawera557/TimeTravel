@@ -37,7 +37,14 @@ if SUPABASE_URL and SUPABASE_ANON_KEY:
 else:
     logger.warning("⚠ Supabase credentials not found. Using local file storage only.")
 # Fallback to file storage for local development
-STORE_PATH = Path(__file__).with_name('data').joinpath('task_state.json')
+# In production/serverless environments, use /tmp directory
+is_production = os.getenv('VERCEL') or os.getenv('AWS_LAMBDA_FUNCTION_NAME') or os.getenv('LAMBDA_TASK_ROOT')
+if is_production:
+    STORE_PATH = Path('/tmp/task_state.json')
+    logger.info("✓ Using /tmp for file storage in production environment")
+else:
+    STORE_PATH = Path(__file__).with_name('data').joinpath('task_state.json')
+    logger.info("✓ Using local data directory for file storage")
 LOCK = RLock()
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
