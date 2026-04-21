@@ -31,6 +31,30 @@
       "status": "in_progress",
       "created_at": "2026-04-17T15:15:11.276156+00:00",
       "updated_at": "2026-04-17T15:15:11.276156+00:00"
+    },
+    {
+      "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+      "title": "LinkedIn Posts",
+      "parent_id": null,
+      "status": "todo",
+      "created_at": "2026-04-21T12:16:15.513667+00:00",
+      "updated_at": "2026-04-21T12:16:15.513667+00:00"
+    },
+    {
+      "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+      "title": "Backend AI Integration",
+      "parent_id": null,
+      "status": "in_progress",
+      "created_at": "2026-04-21T12:38:40.625377+00:00",
+      "updated_at": "2026-04-21T12:38:55.136085+00:00"
+    },
+    {
+      "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+      "title": "AI API creation",
+      "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+      "status": "done",
+      "created_at": "2026-04-21T12:39:42.399909+00:00",
+      "updated_at": "2026-04-21T12:39:58.880162+00:00"
     }
   ],
   "history": [
@@ -170,7 +194,358 @@
           "updated_at": "2026-04-17T15:15:11.276156+00:00"
         }
       ]
+    },
+    {
+      "id": "3f82c9e4-4f06-4db6-b7b3-38def539bf7b",
+      "label": "Created 'LinkedIn Posts'",
+      "created_at": "2026-04-21T12:16:15.513667+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        }
+      ]
+    },
+    {
+      "id": "19bf822a-db93-4a98-8327-f6851920e938",
+      "label": "Created 'Backend AI Integration'",
+      "created_at": "2026-04-21T12:38:40.625377+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:40.625377+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "0776f7ac-df90-4839-bdc6-9a324d87408f",
+      "label": "Updated 'Backend AI Integration'",
+      "created_at": "2026-04-21T12:38:55.136085+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "1323b39f-db13-4583-ad00-787a7e59a520",
+      "label": "Created 'AI API creation'",
+      "created_at": "2026-04-21T12:39:42.399909+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "todo",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:42.399909+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "a65d35f9-c435-46c3-8fee-bb4cc19252b3",
+      "label": "Updated 'AI API creation'",
+      "created_at": "2026-04-21T12:39:50.700005+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:50.700005+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "d2df05f7-fc1b-4686-819f-48b6d98237bb",
+      "label": "Updated 'AI API creation'",
+      "created_at": "2026-04-21T12:39:58.880162+00:00",
+      "tasks": [
+        {
+          "id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "title": "Dashboard Design",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-17T14:59:31.002625+00:00",
+          "updated_at": "2026-04-17T15:07:48.300633+00:00"
+        },
+        {
+          "id": "87a33819-8c78-424d-b682-0d173ed462a7",
+          "title": "Loom video",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-17T14:59:40.686760+00:00",
+          "updated_at": "2026-04-17T14:59:40.686760+00:00"
+        },
+        {
+          "id": "7feff0f4-2609-4aa6-826f-72b13c0bb56a",
+          "title": "Front-end UI Builder",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:10:51.818313+00:00",
+          "updated_at": "2026-04-17T15:10:51.818313+00:00"
+        },
+        {
+          "id": "0845075e-c673-4af1-8f09-a8cc5189429d",
+          "title": "Backend Api systems",
+          "parent_id": "3274388e-51a2-4f3a-bb19-8749c3bc938d",
+          "status": "in_progress",
+          "created_at": "2026-04-17T15:15:11.276156+00:00",
+          "updated_at": "2026-04-17T15:15:11.276156+00:00"
+        },
+        {
+          "id": "b855fa3d-0397-4894-bd22-1780be5bbf77",
+          "title": "LinkedIn Posts",
+          "parent_id": null,
+          "status": "todo",
+          "created_at": "2026-04-21T12:16:15.513667+00:00",
+          "updated_at": "2026-04-21T12:16:15.513667+00:00"
+        },
+        {
+          "id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "title": "Backend AI Integration",
+          "parent_id": null,
+          "status": "in_progress",
+          "created_at": "2026-04-21T12:38:40.625377+00:00",
+          "updated_at": "2026-04-21T12:38:55.136085+00:00"
+        },
+        {
+          "id": "e79e7858-8920-413c-abb0-92ecb607e5cc",
+          "title": "AI API creation",
+          "parent_id": "a8327926-3fe8-41c4-863a-202ddc819aa2",
+          "status": "done",
+          "created_at": "2026-04-21T12:39:42.399909+00:00",
+          "updated_at": "2026-04-21T12:39:58.880162+00:00"
+        }
+      ],
+      "workspace_id": "00000000-0000-0000-0000-000000000000"
     }
   ],
-  "current_index": 5
+  "current_index": 11
 }

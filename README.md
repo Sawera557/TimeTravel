@@ -1,118 +1,83 @@
 # TimeTravel Tasks
-A professional task manager with time-travel functionality. Supports hierarchical tasks, undo/redo, and snapshot-based history navigation.
-## Quick Start
-### Prerequisites
-- Python 3.10+
-- pip
-### Installation & Run
-`ash
-# Install dependencies
-pip install flask flask-cors
-# Run the app
-python app.py
-`
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
-## Features
-- ? Create hierarchical tasks (parent-child relationships)
-- ? Edit tasks inline (title, status, parent)
-- ? Delete tasks with cascade (removes all descendants)
-- ? Undo/Redo with full state restoration
-- ? Time-travel slider to jump between snapshots
-- ? History branching when editing from past states
-- ? Cycle prevention (no circular dependencies)
-- ? Real-time UI updates
-## How to Use
-### Create Tasks
-1. Enter title in left panel
-2. Select parent (optional)
-3. Choose status (todo/in_progress/done)
-4. Click "Add Task"
-### Edit Tasks
-1. Click any task card in center panel
-2. Use right inspector to modify
-3. Click "Save Changes"
-### Time Travel
-- **Undo/Redo**: Click buttons for step-by-step navigation
-- **Slider**: Drag to jump to any historical state
-- **History List**: Click any snapshot to jump directly
-### Delete Tasks
-- Select task ? Click "Delete Task"
-- Automatically removes all child tasks (cascade delete)
-## API Endpoints
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | / | Web interface |
-| GET | /health | Health check |
-| GET | /api/tasks | Get all tasks |
-| POST | /api/tasks | Create task |
-| PATCH | /api/tasks/<id> | Update task |
-| DELETE | /api/tasks/<id> | Delete task + descendants |
-| GET | /api/history | Get snapshot history |
-| POST | /api/history/travel | Jump to snapshot |
-| POST | /api/undo | Undo one step |
-| POST | /api/redo | Redo one step |
-| POST | /api/init | Reset workspace |
-## Project Structure
-`
-FlaskProject/
-+-- app.py                 # Flask backend + business logic
-+-- requirements.txt       # Python dependencies
-+-- README.md             # This file
-+-- DEPLOYMENT.md         # Vercel deployment guide
-+-- ARCHITECTURE.md       # Technical concepts
-+-- templates/
-¦   +-- index.html        # Single-page app template
-+-- static/
-¦   +-- css/
-¦   ¦   +-- app.css       # Professional styling
-¦   +-- js/
-¦       +-- app.js        # Frontend state management
-+-- data/
-    +-- task_state.json   # JSON persistence
-`
-## Core Concepts
-### State Management
-- **Snapshot-based**: Every change creates a complete state snapshot
-- **Immutable history**: Past snapshots never modified
-- **Current index**: Points to active snapshot in history array
-### Dependency Strategy
-- **Cascade delete**: Parent deletion removes all descendants
-- **Cycle prevention**: Validates parent relationships to prevent loops
-- **Stable IDs**: Task IDs remain consistent across undo/redo
-### Time Travel
-- **Undo/Redo**: Navigate history step-by-step
-- **Branching**: Editing from past creates new timeline
-- **Restoration**: Complete state restoration maintains relationships
-## Testing
-Run comprehensive test suite:
-`ash
-python test_e2e.py
-`
-Tests cover: CRUD operations, undo/redo, time travel, cascade delete, cycle prevention, validation.
-## Troubleshooting
-### Module not found
-`ash
-pip install flask flask-cors
-`
-### Data stuck
-Reset workspace:
-`ash
-curl -X POST http://localhost:5000/api/init
-`
-### Port in use
-Kill existing process:
-`ash
-# Windows
-taskkill /F /IM python.exe
-# macOS/Linux
-pkill -f "python app.py"
-`
-## Technical Details
-See [ARCHITECTURE.md](ARCHITECTURE.md) for:
-- State model explanation
-- File architecture
-- API design decisions
-- Performance considerations
-## Deployment
-See [DEPLOYMENT.md](DEPLOYMENT.md) for Vercel deployment instructions.
 
+A simple task manager with undo/redo features. Create tasks, organize them in hierarchies, and go back in time to fix mistakes.
+
+## Quick Start
+
+1. Install Python 3.10 or higher
+2. Install dependencies: `pip install flask flask-cors supabase`
+3. Set up Supabase (optional for data persistence)
+4. Run: `python app_supabase.py`
+5. Open http://127.0.0.1:5000
+
+## How to Use
+
+- **Create Tasks**: Enter a title, choose a parent if needed, pick status, click "Add Task"
+- **Edit Tasks**: Click a task, change details in the right panel, save
+- **Delete Tasks**: Click delete (removes task and all subtasks)
+- **Undo/Redo**: Use buttons or slider to go back/forward in history
+
+## Features
+
+- Hierarchical tasks (parent-child)
+- Undo/Redo with full history
+- Time travel slider
+- Simple web interface
+
+## How It Works
+
+### Main Idea
+
+This app lets you manage tasks with the ability to undo changes, like time travel in a document editor.
+
+### Key Concepts
+
+- **Tasks**: Each task has a title, status (todo/in progress/done), and can have a parent task for organization.
+- **History**: Every change saves a snapshot of all tasks. You can jump back to any previous state.
+- **Undo/Redo**: Go back or forward one step at a time.
+- **Cascade Delete**: Deleting a task removes it and all its subtasks.
+
+### How Time Travel Works
+
+1. When you make a change, the app saves the current state.
+2. History keeps all past states.
+3. You can switch to any saved state using the slider or buttons.
+
+### Tech Stuff
+
+- Built with Flask (Python web framework)
+- Uses Supabase for data storage (optional)
+- Falls back to local JSON file if no Supabase
+- Web interface with HTML/CSS/JS
+
+## Deployment
+
+### Quick Deploy to Vercel
+
+1. Sign up for free accounts: Vercel and Supabase
+2. Create a Supabase project and run the schema from `supabase_schema.sql`
+3. Copy your Supabase URL and API key
+4. Push code to GitHub
+5. Import project in Vercel from GitHub
+6. Set environment variables in Vercel: SUPABASE_URL and SUPABASE_ANON_KEY
+7. Deploy!
+
+### Local Setup
+
+- Install Python and dependencies
+- Set SUPABASE_URL and SUPABASE_ANON_KEY as environment variables
+- Run `python app_supabase.py`
+
+### Notes
+
+- Free tiers available for both services
+- Data persists with Supabase
+- Without Supabase, data is local only
+
+## Project Files
+
+- `app_supabase.py`: Main app
+- `requirements.txt`: Dependencies
+- `templates/index.html`: Web page
+- `static/`: CSS and JS files
+- `data/`: Local data storage

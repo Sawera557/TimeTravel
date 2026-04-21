@@ -1,5 +1,5 @@
-﻿import os
-from supabase import create_client, Client
+from __future__ import annotations
+import os
 from copy import deepcopy
 from datetime import datetime, timezone
 import json
@@ -7,23 +7,27 @@ from pathlib import Path
 from threading import RLock
 from typing import Any
 from uuid import uuid4
+from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
+from supabase import create_client, Client
+# Load environment variables
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
 # Supabase configuration
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_ANON_KEY = os.getenv('SUPABASE_ANON_KEY')
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 # Initialize Supabase client
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY) if SUPABASE_URL and SUPABASE_ANON_KEY else None
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
 # Fallback to file storage for local development
-STORE_PATH = Path(__file__).with_name('data').joinpath('task_state.json')
+STORE_PATH = Path(__file__).with_name("data").joinpath("task_state.json")
 LOCK = RLock()
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 def clone_tasks(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return deepcopy(tasks)
-class SupabaseStore:
+class StateStore:
     def __init__(self):
         self.workspace_id = '00000000-0000-0000-0000-000000000000'  # Default workspace
     def _default_state(self) -> dict[str, Any]:
@@ -210,7 +214,7 @@ class SupabaseStore:
         self._save_to_file(state)
         return state
 # Initialize store
-store = SupabaseStore()
+store = StateStore()
 class TaskManager:
     @staticmethod
     def get_state() -> dict[str, Any]:
@@ -257,7 +261,7 @@ class TaskManager:
             'updated_at': utc_now(),
         }
         tasks.append(task)
-        TaskManager._save_snapshot(state, f"Created '{task['title']}'")
+        TaskManager._save_snapshot(state, f\"Created '{task['title']}\"\")
         store.save(state)
         return task
     @staticmethod
@@ -281,7 +285,7 @@ class TaskManager:
         task['status'] = status
         task['parent_id'] = parent_id
         task['updated_at'] = utc_now()
-        TaskManager._save_snapshot(state, f"Updated '{task['title']}'")
+        TaskManager._save_snapshot(state, f\"Updated '{task['title']}\"\")
         store.save(state)
         return task
     @staticmethod
@@ -300,7 +304,7 @@ class TaskManager:
             raise LookupError('Task not found.')
         deleted_ids = set(TaskManager._get_descendant_ids(task_id, tasks))
         state['tasks'] = [item for item in tasks if item['id'] not in deleted_ids]
-        TaskManager._save_snapshot(state, f"Deleted '{task['title']}' and descendants")
+        TaskManager._save_snapshot(state, f\"Deleted '{task['title']}' and descendants\"\")
         store.save(state)
         return {
             'deleted_count': len(deleted_ids),
@@ -351,7 +355,6 @@ class TaskManager:
     @staticmethod
     def initialize() -> dict[str, Any]:
         return store.reset()
-# Flask routes (same as before)
 @app.route('/', methods=['GET'])
 def index() -> str:
     return render_template('index.html')
