@@ -278,7 +278,39 @@ class TaskManager:
         return store.load()
     @staticmethod
     def get_all_tasks() -> list[dict[str, Any]]:
-        return TaskManager.get_state()['tasks']
+        return TaskManager.get_latest_state()['tasks']
+    @staticmethod
+    def _deserialize_snapshot_tasks(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
+        tasks = snapshot.get('tasks', [])
+        if isinstance(tasks, str):
+            try:
+                tasks = json.loads(tasks)
+            except (json.JSONDecodeError, TypeError):
+                logger.error(f"Failed to deserialize tasks from snapshot {snapshot.get('id')}")
+                return []
+        if tasks is None:
+            return []
+        if not isinstance(tasks, list):
+            logger.warning(f"Snapshot tasks is not a list: {type(tasks)}")
+            return []
+        return clone_tasks(tasks)
+    @staticmethod
+    def get_latest_state() -> dict[str, Any]:
+        state = TaskManager.get_state()
+        history = state.get('history', [])
+        if not history:
+            return {
+                'tasks': [],
+                'history': [],
+                'current_index': 0,
+            }
+        latest_index = len(history) - 1
+        latest_tasks = TaskManager._deserialize_snapshot_tasks(history[latest_index])
+        return {
+            'tasks': latest_tasks,
+            'history': history,
+            'current_index': latest_index,
+        }
     @staticmethod
     def _build_history_payload(history: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
@@ -305,7 +337,7 @@ class TaskManager:
         }
     @staticmethod
     def get_workspace() -> dict[str, Any]:
-        return TaskManager.build_workspace_payload(TaskManager.get_state())
+        return TaskManager.build_workspace_payload(TaskManager.get_latest_state())
     @staticmethod
     def _save_snapshot(state: dict[str, Any], label: str) -> dict[str, Any]:
         return store.save_snapshot(state, label)
@@ -333,7 +365,7 @@ class TaskManager:
             ancestor_id = ancestor.get('parent_id') if ancestor else None
     @staticmethod
     def create_task(title: str, parent_id: str | None, status: str) -> dict[str, Any]:
-        state = TaskManager.get_state()
+        state = TaskManager.get_latest_state()
         tasks = state['tasks']
         TaskManager._assert_parent_is_valid(tasks, None, parent_id)
         task = {
@@ -350,7 +382,7 @@ class TaskManager:
         return task
     @staticmethod
     def update_task(task_id: str, payload: dict[str, Any]) -> dict[str, Any]:
-        state = TaskManager.get_state()
+        state = TaskManager.get_latest_state()
         tasks = state['tasks']
         task = TaskManager._find_task(tasks, task_id)
         if task is None:
@@ -381,7 +413,7 @@ class TaskManager:
         return descendants
     @staticmethod
     def delete_task(task_id: str) -> dict[str, Any]:
-        state = TaskManager.get_state()
+        state = TaskManager.get_latest_state()
         tasks = state['tasks']
         task = TaskManager._find_task(tasks, task_id)
         if task is None:
@@ -397,11 +429,11 @@ class TaskManager:
         }
     @staticmethod
     def get_history() -> list[dict[str, Any]]:
-        history = TaskManager.get_state()['history']
+        history = TaskManager.get_latest_state()['history']
         return TaskManager._build_history_payload(history)
     @staticmethod
     def get_current_index() -> int:
-        return TaskManager.get_state()['current_index']
+        return TaskManager.get_latest_state()['current_index']
     @staticmethod
     def travel_to_state(index: int) -> dict[str, Any] | None:
         state = TaskManager.get_state()
@@ -418,25 +450,12 @@ class TaskManager:
         
         snapshot = history[index]
         
-        # Safely deserialize tasks
-        tasks = snapshot.get('tasks', [])
-        if isinstance(tasks, str):
-            try:
-                tasks = json.loads(tasks)
-            except (json.JSONDecodeError, TypeError):
-                logger.error(f"Failed to deserialize tasks from snapshot {snapshot['id']}")
-                tasks = []
-        elif tasks is None:
-            tasks = []
-        
-        # Ensure tasks is a list
-        if not isinstance(tasks, list):
-            logger.warning(f"Tasks is not a list: {type(tasks)}")
-            tasks = []
-        
-        state['current_index'] = index
-        state['tasks'] = clone_tasks(tasks)
-        store.save(state)
+        tasks = TaskManager._deserialize_snapshot_tasks(snapshot)
+        snapshot_state = {
+            'tasks': tasks,
+            'history': history,
+            'current_index': index,
+        }
         
         return {
             'index': index,
@@ -444,9 +463,10 @@ class TaskManager:
                 'id': snapshot['id'],
                 'label': snapshot['label'],
                 'created_at': snapshot['created_at'],
-                'task_count': len(state['tasks']),
+                'task_count': len(tasks),
             },
-            'tasks': state['tasks'],
+            'tasks': tasks,
+            'workspace': TaskManager.build_workspace_payload(snapshot_state),
         }
     @staticmethod
     def undo() -> dict[str, Any] | None:
@@ -497,7 +517,7 @@ def update_task(task_id: str):
         task = TaskManager.update_task(task_id, data)
         return jsonify({'task': task, 'workspace': TaskManager.get_workspace()}), 200
     except LookupError as exc:
-        return jsonify({'error': str(exc)}), 404
+        return jsonify({'error': str(exc), 'workspace': TaskManager.get_workspace()}), 404
     except ValueError as exc:
         return jsonify({'error': str(exc)}), 400
     except Exception as exc:
@@ -508,7 +528,7 @@ def delete_task(task_id: str):
         result = TaskManager.delete_task(task_id)
         return jsonify({**result, 'workspace': TaskManager.get_workspace()}), 200
     except LookupError as exc:
-        return jsonify({'error': str(exc)}), 404
+        return jsonify({'error': str(exc), 'workspace': TaskManager.get_workspace()}), 404
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 @app.route('/api/history', methods=['GET'])

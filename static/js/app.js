@@ -43,7 +43,10 @@ async function api(url, options = {}) {
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(payload.error || "Unexpected request failure.");
+    const error = new Error(payload.error || "Unexpected request failure.");
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
   }
   return payload;
 }
@@ -105,6 +108,19 @@ function applyWorkspace(workspace, preserveSelection = true) {
   }
 
   renderAll();
+}
+
+async function recoverFromMissingTask(error, message) {
+  const workspace = error?.payload?.workspace;
+  state.selectedTaskId = null;
+
+  if (workspace) {
+    applyWorkspace(workspace, false);
+  } else {
+    await refreshWorkspace(false);
+  }
+
+  showToast(message, true);
 }
 
 function buildParentOptions(select, selectedValue, currentTaskId = null) {
@@ -376,6 +392,13 @@ elements.editForm.addEventListener("submit", async (event) => {
     }
     showToast("Task updated.");
   } catch (error) {
+    if (error.status === 404) {
+      await recoverFromMissingTask(
+        error,
+        "That task no longer exists in the current snapshot. The view was refreshed.",
+      );
+      return;
+    }
     showToast(error.message, true);
   }
 });
@@ -401,18 +424,23 @@ elements.deleteButton.addEventListener("click", async () => {
     }
     showToast("Task subtree deleted.");
   } catch (error) {
+    if (error.status === 404) {
+      await recoverFromMissingTask(
+        error,
+        "That task was already removed. The view was refreshed.",
+      );
+      return;
+    }
     showToast(error.message, true);
   }
 });
 
 elements.undoButton.addEventListener("click", async () => {
+  if (state.currentIndex <= 0) {
+    return;
+  }
   try {
-    const response = await api("/api/undo", { method: "POST", body: JSON.stringify({}) });
-    if (response.workspace) {
-      applyWorkspace(response.workspace);
-    } else {
-      await refreshWorkspace();
-    }
+    await navigateTo(state.currentIndex - 1);
     showToast("Moved one snapshot back.");
   } catch (error) {
     showToast(error.message, true);
@@ -420,13 +448,11 @@ elements.undoButton.addEventListener("click", async () => {
 });
 
 elements.redoButton.addEventListener("click", async () => {
+  if (state.currentIndex >= state.history.length - 1) {
+    return;
+  }
   try {
-    const response = await api("/api/redo", { method: "POST", body: JSON.stringify({}) });
-    if (response.workspace) {
-      applyWorkspace(response.workspace);
-    } else {
-      await refreshWorkspace();
-    }
+    await navigateTo(state.currentIndex + 1);
     showToast("Moved one snapshot forward.");
   } catch (error) {
     showToast(error.message, true);
@@ -469,9 +495,6 @@ elements.slider.addEventListener("input", async (event) => {
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     await refreshWorkspace(false);
-    if (!isLatestSnapshot()) {
-      await navigateTo(state.latestIndex);
-    }
   } catch (error) {
     showToast(error.message, true);
   }
