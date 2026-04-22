@@ -1,349 +1,109 @@
 {
   "tasks": [
     {
-      "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-      "title": "Root",
+      "id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
+      "title": "Dashboard design",
       "parent_id": null,
       "status": "todo",
-      "created_at": "2026-04-21T14:06:44.114331+00:00",
-      "updated_at": "2026-04-21T14:06:44.114331+00:00"
+      "created_at": "2026-04-22T07:16:23.861343+00:00",
+      "updated_at": "2026-04-22T07:16:23.861343+00:00"
     },
     {
-      "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-      "title": "Design API",
+      "id": "cab87b34-be48-4af4-8889-05dfabed3ff7",
+      "title": "UI/UX testing",
       "parent_id": null,
       "status": "todo",
-      "created_at": "2026-04-21T14:08:52.565066+00:00",
-      "updated_at": "2026-04-21T14:08:52.565066+00:00"
+      "created_at": "2026-04-22T07:23:55.071703+00:00",
+      "updated_at": "2026-04-22T07:23:55.071703+00:00"
     },
     {
-      "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-      "title": "Lambda",
-      "parent_id": null,
+      "id": "b09fc81c-5f92-4776-a6e6-1e57f44cf23e",
+      "title": "Front-end Figma Design",
+      "parent_id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
       "status": "todo",
-      "created_at": "2026-04-21T14:09:00.223152+00:00",
-      "updated_at": "2026-04-21T14:09:00.223152+00:00"
-    },
-    {
-      "id": "37528150-6f2c-4e3a-b292-3a1121b6b483",
-      "title": "Lambda Function creation",
-      "parent_id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-      "status": "done",
-      "created_at": "2026-04-21T14:09:14.968689+00:00",
-      "updated_at": "2026-04-21T14:09:26.219023+00:00"
+      "created_at": "2026-04-22T07:29:26.341282+00:00",
+      "updated_at": "2026-04-22T07:29:26.341282+00:00"
     }
   ],
   "history": [
     {
-      "id": "24cc0cde-162f-42cc-8a29-7c09b3d463d7",
+      "id": "75e98688-e257-41b7-9dc5-84906073f526",
       "label": "Workspace initialized",
-      "created_at": "2026-04-21T14:06:42.082099+00:00",
+      "created_at": "2026-04-22T07:16:20.942120+00:00",
       "tasks": []
     },
     {
-      "id": "9666641f-6d5e-4397-a0e3-2b8a38f8ba08",
-      "label": "Created 'Root'",
-      "created_at": "2026-04-21T14:06:44.115331+00:00",
+      "id": "095491b2-f201-4858-a40d-4501de4e3ca4",
+      "label": "Created 'Dashboard design'",
+      "created_at": "2026-04-22T07:16:23.861343+00:00",
       "tasks": [
         {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
+          "id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
+          "title": "Dashboard design",
           "parent_id": null,
           "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
+          "created_at": "2026-04-22T07:16:23.861343+00:00",
+          "updated_at": "2026-04-22T07:16:23.861343+00:00"
         }
       ],
       "workspace_id": "00000000-0000-0000-0000-000000000000"
     },
     {
-      "id": "635b2e7c-ac33-452c-8a2d-ab0f3314c4a7",
-      "label": "Created 'Child'",
-      "created_at": "2026-04-21T14:06:46.144930+00:00",
+      "id": "643eb461-fee9-4aeb-bdad-ce54b30386f8",
+      "label": "Created 'UI/UX testing'",
+      "created_at": "2026-04-22T07:23:55.071703+00:00",
       "tasks": [
         {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
+          "id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
+          "title": "Dashboard design",
           "parent_id": null,
           "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
+          "created_at": "2026-04-22T07:16:23.861343+00:00",
+          "updated_at": "2026-04-22T07:16:23.861343+00:00"
         },
         {
-          "id": "4334c96d-2f69-4abd-8d14-e71be76811ee",
-          "title": "Child",
-          "parent_id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
+          "id": "cab87b34-be48-4af4-8889-05dfabed3ff7",
+          "title": "UI/UX testing",
+          "parent_id": null,
           "status": "todo",
-          "created_at": "2026-04-21T14:06:46.144930+00:00",
-          "updated_at": "2026-04-21T14:06:46.144930+00:00"
+          "created_at": "2026-04-22T07:23:55.071703+00:00",
+          "updated_at": "2026-04-22T07:23:55.071703+00:00"
         }
       ],
       "workspace_id": "00000000-0000-0000-0000-000000000000"
     },
     {
-      "id": "456aa659-0818-4837-aa19-beb0cbf977cf",
-      "label": "Created 'Grandchild'",
-      "created_at": "2026-04-21T14:06:48.174081+00:00",
+      "id": "699334cc-76d3-4ab0-8ed6-b30461adcf4a",
+      "label": "Created 'Front-end Figma Design'",
+      "created_at": "2026-04-22T07:29:26.341282+00:00",
       "tasks": [
         {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
+          "id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
+          "title": "Dashboard design",
           "parent_id": null,
           "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
+          "created_at": "2026-04-22T07:16:23.861343+00:00",
+          "updated_at": "2026-04-22T07:16:23.861343+00:00"
         },
         {
-          "id": "4334c96d-2f69-4abd-8d14-e71be76811ee",
-          "title": "Child",
-          "parent_id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
+          "id": "cab87b34-be48-4af4-8889-05dfabed3ff7",
+          "title": "UI/UX testing",
+          "parent_id": null,
           "status": "todo",
-          "created_at": "2026-04-21T14:06:46.144930+00:00",
-          "updated_at": "2026-04-21T14:06:46.144930+00:00"
+          "created_at": "2026-04-22T07:23:55.071703+00:00",
+          "updated_at": "2026-04-22T07:23:55.071703+00:00"
         },
         {
-          "id": "d702c904-4c81-409c-b256-8f67485d9d8c",
-          "title": "Grandchild",
-          "parent_id": "4334c96d-2f69-4abd-8d14-e71be76811ee",
+          "id": "b09fc81c-5f92-4776-a6e6-1e57f44cf23e",
+          "title": "Front-end Figma Design",
+          "parent_id": "0a21ef25-e3ea-48b2-87c0-a3388f57a4b4",
           "status": "todo",
-          "created_at": "2026-04-21T14:06:48.174081+00:00",
-          "updated_at": "2026-04-21T14:06:48.174081+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "c39203dd-fb95-49c2-8379-6da54c940bcc",
-      "label": "Deleted 'Child' and descendants",
-      "created_at": "2026-04-21T14:08:42.955208+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "647e99bb-d692-40ec-80a1-bb31074fd6a5",
-      "label": "Created 'Design API'",
-      "created_at": "2026-04-21T14:08:52.565066+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "c214d007-2b59-4269-b89c-6ddac0320fc7",
-      "label": "Created 'Lambda'",
-      "created_at": "2026-04-21T14:09:00.223152+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        },
-        {
-          "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "title": "Lambda",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:00.223152+00:00",
-          "updated_at": "2026-04-21T14:09:00.223152+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "3f1a3393-e5d5-419e-9845-74a75b376d6d",
-      "label": "Created 'Lambda Function creation'",
-      "created_at": "2026-04-21T14:09:14.968689+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        },
-        {
-          "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "title": "Lambda",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:00.223152+00:00",
-          "updated_at": "2026-04-21T14:09:00.223152+00:00"
-        },
-        {
-          "id": "37528150-6f2c-4e3a-b292-3a1121b6b483",
-          "title": "Lambda Function creation",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:14.968689+00:00",
-          "updated_at": "2026-04-21T14:09:14.968689+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "7174fae8-1360-4bc6-94d1-dd5ded6fe561",
-      "label": "Updated 'Lambda Function creation'",
-      "created_at": "2026-04-21T14:09:19.070005+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        },
-        {
-          "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "title": "Lambda",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:00.223152+00:00",
-          "updated_at": "2026-04-21T14:09:00.223152+00:00"
-        },
-        {
-          "id": "37528150-6f2c-4e3a-b292-3a1121b6b483",
-          "title": "Lambda Function creation",
-          "parent_id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:14.968689+00:00",
-          "updated_at": "2026-04-21T14:09:19.070005+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "621dc9fc-ca1a-46a7-a658-561d4a15b090",
-      "label": "Updated 'Lambda Function creation'",
-      "created_at": "2026-04-21T14:09:23.503626+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        },
-        {
-          "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "title": "Lambda",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:00.223152+00:00",
-          "updated_at": "2026-04-21T14:09:00.223152+00:00"
-        },
-        {
-          "id": "37528150-6f2c-4e3a-b292-3a1121b6b483",
-          "title": "Lambda Function creation",
-          "parent_id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "status": "in_progress",
-          "created_at": "2026-04-21T14:09:14.968689+00:00",
-          "updated_at": "2026-04-21T14:09:23.503626+00:00"
-        }
-      ],
-      "workspace_id": "00000000-0000-0000-0000-000000000000"
-    },
-    {
-      "id": "7c3a103b-6866-4463-99a1-9fae8272258a",
-      "label": "Updated 'Lambda Function creation'",
-      "created_at": "2026-04-21T14:09:26.219023+00:00",
-      "tasks": [
-        {
-          "id": "eb67ec2f-ddee-45f3-b593-c8c6c4056cfd",
-          "title": "Root",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:06:44.114331+00:00",
-          "updated_at": "2026-04-21T14:06:44.114331+00:00"
-        },
-        {
-          "id": "a8f38372-51c0-4a94-8207-a27b6e997c00",
-          "title": "Design API",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:08:52.565066+00:00",
-          "updated_at": "2026-04-21T14:08:52.565066+00:00"
-        },
-        {
-          "id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "title": "Lambda",
-          "parent_id": null,
-          "status": "todo",
-          "created_at": "2026-04-21T14:09:00.223152+00:00",
-          "updated_at": "2026-04-21T14:09:00.223152+00:00"
-        },
-        {
-          "id": "37528150-6f2c-4e3a-b292-3a1121b6b483",
-          "title": "Lambda Function creation",
-          "parent_id": "ae3836b0-8648-42e8-bad0-8309111be0b0",
-          "status": "done",
-          "created_at": "2026-04-21T14:09:14.968689+00:00",
-          "updated_at": "2026-04-21T14:09:26.219023+00:00"
+          "created_at": "2026-04-22T07:29:26.341282+00:00",
+          "updated_at": "2026-04-22T07:29:26.341282+00:00"
         }
       ],
       "workspace_id": "00000000-0000-0000-0000-000000000000"
     }
   ],
-  "current_index": 10
+  "current_index": 3
 }

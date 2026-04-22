@@ -1,90 +1,321 @@
-# TimeTravel Tasks
+# TimeTravel Tasks - Flask + Supabase
 
-A simple task manager with undo/redo features. Create tasks, organize them in hierarchies, and go back in time to fix mistakes.
+A real-time task management application with undo/redo and time-travel capabilities powered by Flask and Supabase PostgreSQL.
 
-## Quick Start
+## 🚀 Quick Start
 
-1. Install Python 3.10 or higher
-2. Install dependencies: `pip install flask flask-cors supabase`
-3. Set up Supabase (optional for data persistence)
-4. Run: `python app.py`
-5. Open http://127.0.0.1:5000
+### 1. Database Setup (Most Important!)
 
-## How to Use
+Your application needs Supabase database tables. **This is likely why you're seeing errors.**
 
-- **Create Tasks**: Enter a title, choose a parent if needed, pick status, click "Add Task"
-- **Edit Tasks**: Click a task, change details in the right panel, save
-- **Delete Tasks**: Click delete (removes task and all subtasks)
-- **Undo/Redo**: Use buttons or slider to go back/forward in history
+**3-minute fix:**
 
-## Features
+#### Step 1: Run Setup Checker
+```powershell
+python quick_setup.py
+```
 
-- Hierarchical tasks (parent-child)
-- Undo/Redo with full history
-- Time travel slider
-- Simple web interface
+#### Step 2: Create Database Schema
+1. Go to: https://app.supabase.com/project/txsrejfrqlhrheqcsmzp
+2. Click **SQL Editor** → **New Query**
+3. Copy contents of: `supabase_schema_updated.sql`
+4. Click **Run**
 
-## How It Works
+#### Step 3: Restart App
+```powershell
+python app.py
+```
 
-### Main Idea
+### 2. Environment Configuration
 
-This app lets you manage tasks with the ability to undo changes, like time travel in a document editor.
+Create `.env` file in project root:
+```
+SUPABASE_URL=https://txsrejfrqlhrheqcsmzp.supabase.co
+SUPABASE_ANON_KEY=your_anon_key_here
+```
 
-### Key Concepts
+Get these values from Supabase:
+- Dashboard → Project Settings → API → Copy the values
 
-- **Tasks**: Each task has a title, status (todo/in progress/done), and can have a parent task for organization.
-- **History**: Every change saves a snapshot of all tasks. You can jump back to any previous state.
-- **Undo/Redo**: Go back or forward one step at a time.
-- **Cascade Delete**: Deleting a task removes it and all its subtasks.
+### 3. Install Dependencies
+```powershell
+pip install -r requirements.txt
+```
 
-### How Time Travel Works
+### 4. Run Application
+```powershell
+python app.py
+```
 
-1. When you make a change, the app saves the current state.
-2. History keeps all past states.
-3. You can switch to any saved state using the slider or buttons.
+Visit: http://localhost:5000
 
-### Tech Stuff
+## 📁 File Structure
 
-- Built with Flask (Python web framework)
-- Uses Supabase for data storage (optional)
-- Falls back to local JSON file if no Supabase
-- Web interface with HTML/CSS/JS
+```
+FlaskProject/
+├── app.py                          # Main Flask application
+├── requirements.txt                # Python dependencies
+├── supabase_schema.sql             # Original database schema
+├── supabase_schema_updated.sql     # Improved schema (use this one)
+├── .env                            # Environment variables (create this!)
+├── README.md                       # This file
+├── quick_setup.py                  # Quick setup checker
+├── setup_supabase.py               # Python setup verification
+├── static/
+│   ├── css/
+│   │   └── app.css
+│   └── js/
+│       └── app.js
+├── templates/
+│   └── index.html
+└── data/
+    └── task_state.json            # Local fallback storage
+```
 
-## Deployment
+## 🔧 Features
 
-### Quick Deploy to Vercel
+### Task Management
+- ✅ Create tasks with hierarchical structure
+- ✅ Update task status (todo → in_progress → done)
+- ✅ Delete tasks (cascades to children)
+- ✅ Nested/subtask support
 
-1. Sign up for free accounts: Vercel and Supabase
-2. Create a Supabase project and run the schema from `supabase_schema.sql`
-3. Copy your Supabase URL and API key
-4. Push code to GitHub
-5. Import project in Vercel from GitHub
-6. Set environment variables in Vercel: SUPABASE_URL and SUPABASE_ANON_KEY
-7. Deploy!
+### Time Travel
+- ⏪ Undo/Redo - Go back/forward in history
+- 🕐 Jump to any snapshot
+- 📸 View history of all changes
+- 🌳 Non-destructive branching
 
-### Local Setup
+### Data Persistence
+- 🗄️ **Primary**: Supabase PostgreSQL Database
+- 📄 **Fallback**: Local JSON file (automatic)
+- 🔄 Automatic failover if Supabase is unavailable
 
-- Install Python and dependencies
-- Set SUPABASE_URL and SUPABASE_ANON_KEY as environment variables
-- Run `python app.py`
+## 🔌 API Endpoints
 
-### Notes
+### Tasks
+```
+GET    /api/tasks              # List all tasks
+POST   /api/tasks              # Create new task
+PATCH  /api/tasks/<id>         # Update task
+DELETE /api/tasks/<id>         # Delete task
+```
 
-- Free tiers available for both services
-- Data persists with Supabase
-- Without Supabase, data is local only
+### History
+```
+GET    /api/history            # Get all snapshots
+POST   /api/history/travel     # Jump to snapshot index
+POST   /api/undo               # Undo last change
+POST   /api/redo               # Redo undone change
+```
 
-## Project Files
+### System
+```
+GET    /health                 # Health status
+POST   /api/init              # Reset workspace
+GET    /api/diagnostic        # Detailed diagnostics
+```
 
-- `app.py`: Main app with Supabase integration and production file system fixes
-- `requirements.txt`: Dependencies
-- `templates/index.html`: Web page
-- `static/`: CSS and JS files
-- `data/`: Local data storage (development only)
-- `.env.example`: Environment configuration template
+## 🐛 Troubleshooting
 
-## Production Notes
+### Error: "Could not find the table 'public.workspace_state'"
 
-- **File System**: Automatically uses `/tmp` in serverless environments (Vercel, AWS Lambda)
-- **Supabase Required**: Production deployments should use Supabase for data persistence
-- **Environment Variables**: Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` for production
+This means the database schema hasn't been created yet.
+
+**Fix:**
+1. Run `python quick_setup.py` to see status
+2. Go to Supabase SQL Editor
+3. Run the schema from `supabase_schema_updated.sql`
+4. Restart Flask app
+
+### Error: "SUPABASE_URL not found"
+
+`.env` file missing or not in the right place.
+
+**Fix:**
+1. Create `.env` in project root (same folder as `app.py`)
+2. Add the credentials from Supabase dashboard
+3. Restart Flask app
+
+### Application running but using "file" storage instead of "supabase"
+
+Supabase connection issue - check logs.
+
+**Fix:**
+1. Visit `http://localhost:5000/api/diagnostic` to see issue
+2. Verify `.env` has correct credentials
+3. Check Supabase project is not paused
+4. Verify internet connection
+5. See Flask console for error details
+
+## 📊 Database Schema
+
+### Tasks Table
+```sql
+- id (UUID) - Primary key
+- title (TEXT) - Task name
+- parent_id (UUID) - For hierarchical structure
+- status (TEXT) - 'todo' | 'in_progress' | 'done'
+- created_at (TIMESTAMPTZ) - Creation time
+- updated_at (TIMESTAMPTZ) - Last update
+- workspace_id (UUID) - Workspace identifier
+```
+
+### Snapshots Table
+```sql
+- id (UUID) - Snapshot identifier
+- label (TEXT) - Human readable label
+- created_at (TIMESTAMPTZ) - When snapshot was taken
+- tasks (JSONB) - Serialized task list
+- workspace_id (UUID) - Workspace identifier
+```
+
+### Workspace State Table
+```sql
+- id (UUID) - Workspace identifier
+- current_snapshot_id (UUID) - Points to active snapshot
+- created_at (TIMESTAMPTZ) - Creation time
+- updated_at (TIMESTAMPTZ) - Last update
+```
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────┐
+│   Browser / Frontend    │
+│   (HTML + JS/CSS)       │
+└──────────────┬──────────┘
+               │
+               ↓ HTTP Requests
+┌─────────────────────────┐
+│  Flask Web Server       │
+│  - Routing              │
+│  - CORS Headers         │
+│  - Static Files         │
+└──────────────┬──────────┘
+               │
+               ↓
+┌─────────────────────────┐
+│  TaskManager            │
+│  - Business Logic       │
+│  - Validation           │
+│  - Undo/Redo Logic      │
+└──────────────┬──────────┘
+               │
+               ↓
+┌─────────────────────────┐
+│  SupabaseStore          │
+│  - Persistence Layer    │
+│  - Try Supabase         │
+│  - Fallback to File     │
+└──────────────┬──────────┘
+               │
+        ┌──────┴──────┐
+        ↓             ↓
+    ┌───────┐    ┌───────────┐
+    │ File  │    │ Supabase  │
+    │ JSON  │    │ Postgre   │
+    │       │    │ SQL       │
+    └───────┘    └───────────┘
+```
+
+## 🔐 Security Notes
+
+### Development
+- Row Level Security (RLS) enabled
+- Policies allow all operations (for testing)
+- Using anon (public) key
+
+### Production Considerations
+- ⚠️ Update RLS policies with proper restrictions
+- ⚠️ Set up Supabase Auth for user authentication
+- ⚠️ Use service role key only on backend
+- ⚠️ Enable database backups
+- ⚠️ Set up rate limiting
+- ⚠️ Configure CORS for specific domains
+- ⚠️ Add audit logging
+
+## 📝 How It Works
+
+### Creating a Task
+1. User submits form → Flask `/api/tasks` POST
+2. TaskManager validates input
+3. Task created in memory
+4. **Snapshot saved** to Supabase (with label)
+5. All tasks saved to Supabase
+6. Response sent to frontend
+7. UI updates with new task
+
+### Undo Operation
+1. User clicks undo → Flask `/api/undo` POST
+2. TaskManager gets current state index
+3. Decrements index by 1
+4. Loads snapshot at that index
+5. Restores tasks from that snapshot
+6. Updates workspace_state pointer in Supabase
+7. Response with new state
+8. UI updates with previous state
+
+### Time Travel
+1. User selects historical snapshot
+2. Flask `/api/history/travel` POST with index
+3. TaskManager validates index is in range
+4. Loads snapshot at that index
+5. Sets current_index to that point
+6. Any new action branches from here (truncates future)
+7. UI updates with that historical state
+
+## 🚀 Running for Development
+
+```powershell
+# Terminal 1: Run Flask app
+python app.py
+
+# Terminal 2: (Optional) Monitor logs
+# Or just watch the Flask terminal output
+
+# Browser: Visit app
+http://localhost:5000
+```
+
+### Development Features
+- Hot reload disabled (for stability)
+- Debug logging enabled
+- Full error stack traces
+- File storage fallback ready
+
+## 📦 Dependencies
+
+```
+flask              # Web framework
+flask-cors         # Cross-origin requests
+supabase           # Database client
+python-dotenv      # Environment variables
+```
+
+Install with:
+```powershell
+pip install -r requirements.txt
+```
+
+## 🤝 Support
+
+If something isn't working:
+
+1. **Check Status**: `python quick_setup.py`
+2. **View Diagnostics**: `http://localhost:5000/api/diagnostic`
+3. **Check Health**: `http://localhost:5000/health`
+4. **Review Logs**: Watch Flask console output
+
+## 📄 License
+
+Open source project for learning and development.
+
+---
+
+**Ready to get started?** 
+1. Run: `python quick_setup.py`
+2. Follow the instructions it provides
+3. Visit: `http://localhost:5000`
+
+Happy task managing! 🎉

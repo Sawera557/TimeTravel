@@ -34,7 +34,7 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_ANON_KEY = os.getenv('SUPABASE_ANON_KEY')
 
 # Initialize Supabase client
-supabase: Client = None
+supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_ANON_KEY:
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
@@ -490,11 +490,73 @@ def initialize():
     return jsonify({'message': 'Workspace reset.', 'state': state}), 200
 @app.route('/health', methods=['GET'])
 def health():
+    supabase_status = 'unavailable'
+    tables_info = {}
+    
+    if supabase:
+        try:
+            # Test connection and check tables
+            workspace_response = supabase.table('workspace_state').select('*', count='exact').limit(1).execute()
+            tasks_response = supabase.table('tasks').select('*', count='exact').limit(1).execute()
+            snapshots_response = supabase.table('snapshots').select('*', count='exact').limit(1).execute()
+            
+            supabase_status = 'connected'
+            tables_info = {
+                'workspace_state': getattr(workspace_response, 'count', 0),
+                'tasks': getattr(tasks_response, 'count', 0),
+                'snapshots': getattr(snapshots_response, 'count', 0)
+            }
+        except Exception as e:
+            supabase_status = f'error: {str(e)[:50]}'
+            logger.debug(f"Health check Supabase error: {e}")
+    
     status = {
-        'status': 'healthy',
-        'supabase': 'connected' if supabase else 'unavailable',
-        'storage': 'supabase' if supabase else 'file'
+        'status': 'healthy' if supabase_status == 'connected' else 'degraded',
+        'supabase': supabase_status,
+        'storage': 'supabase' if supabase_status == 'connected' else 'file',
+        'tables': tables_info,
+        'environment': 'production' if is_production else 'development'
     }
-    return jsonify(status), 200
+    
+    # Return 503 if Supabase is expected but not available
+    status_code = 200 if supabase_status in ['connected', 'unavailable'] else 503
+    return jsonify(status), status_code
+
+@app.route('/api/diagnostic', methods=['GET'])
+def diagnostic():
+    """Diagnostic endpoint to help troubleshoot Supabase integration"""
+    diagnostics = {
+        'environment': {
+            'supabase_url_set': bool(SUPABASE_URL),
+            'supabase_key_set': bool(SUPABASE_ANON_KEY),
+            'is_production': is_production,
+            'file_storage_path': str(STORE_PATH)
+        },
+        'supabase': {
+            'connected': supabase is not None
+        },
+        'schema': {}
+    }
+    
+    if supabase:
+        try:
+            # Check each table
+            tables_to_check = ['workspace_state', 'snapshots', 'tasks']
+            for table_name in tables_to_check:
+                try:
+                    response = supabase.table(table_name).select('*', count='exact').limit(1).execute()
+                    diagnostics['schema'][table_name] = {
+                        'exists': True,
+                        'row_count': getattr(response, 'count', 0)
+                    }
+                except Exception as e:
+                    diagnostics['schema'][table_name] = {
+                        'exists': False,
+                        'error': str(e)
+                    }
+        except Exception as e:
+            diagnostics['supabase']['error'] = str(e)
+    
+    return jsonify(diagnostics), 200
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
