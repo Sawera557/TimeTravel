@@ -263,11 +263,17 @@ function selectTask(taskId) {
 }
 
 async function navigateTo(index) {
-  await api("/api/history/travel", {
-    method: "POST",
-    body: JSON.stringify({ index }),
-  });
-  await refreshWorkspace();
+  try {
+    const response = await api("/api/history/travel", {
+      method: "POST",
+      body: JSON.stringify({ index }),
+    });
+    await refreshWorkspace();
+    return true;
+  } catch (error) {
+    // Don't call refreshWorkspace on error - state hasn't changed
+    throw error;
+  }
 }
 
 elements.createForm.addEventListener("submit", async (event) => {
@@ -370,8 +376,17 @@ elements.resetButton.addEventListener("click", async () => {
 elements.slider.addEventListener("input", async (event) => {
   const index = Number(event.target.value);
   try {
-    await navigateTo(index);
+    const result = await navigateTo(index);
+    if (!result) {
+      // If navigation fails, reset slider to current index
+      const currentIndex = state.currentIndex;
+      elements.slider.value = String(currentIndex);
+      showToast("Could not navigate to that snapshot.", true);
+    }
   } catch (error) {
+    // Reset slider to current index on error
+    const currentIndex = state.currentIndex;
+    elements.slider.value = String(currentIndex);
     showToast(error.message, true);
   }
 });

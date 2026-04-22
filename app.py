@@ -26,8 +26,20 @@ try:
 except ImportError:
     logger.warning("⚠ python-dotenv not installed, using system environment variables only")
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 CORS(app)
+
+# Configure caching for static files
+@app.after_request
+def add_cache_headers(response):
+    """Add cache headers for static files"""
+    if response.status_code == 200:
+        # Set cache for static files (CSS, JS): 1 day for development, 30 days for production
+        if request.path.startswith('/static/'):
+            cache_duration = 86400 if not is_production else 2592000
+            response.headers['Cache-Control'] = f'public, max-age={cache_duration}'
+            response.headers['ETag'] = response.get_etag()[0] if response.get_etag() else None
+    return response
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
@@ -98,17 +110,21 @@ class SupabaseStore:
                 history = []
                 current_index = 0
                 for i, snap in enumerate(history_response.data):
+                    # Properly deserialize tasks from JSONB
+                    tasks_data = snap['tasks']
+                    if isinstance(tasks_data, str):
+                        tasks_data = json.loads(tasks_data)
                     history.append({
                         'id': snap['id'],
                         'label': snap['label'],
                         'created_at': snap['created_at'],
-                        'tasks': snap['tasks']
+                        'tasks': tasks_data
                     })
                     if snap['id'] == current_snapshot_id:
                         current_index = i
                 # Get current tasks from snapshot
                 tasks = current_snapshot['tasks'] if isinstance(current_snapshot['tasks'], list) else json.loads(current_snapshot['tasks'])
-                logger.debug(f"Loaded {len(tasks)} tasks from Supabase")
+                logger.info(f"✓ Loaded {len(tasks)} tasks from Supabase (snapshot {current_snapshot_id[:8]}...)")
                 return {
                     'tasks': tasks,
                     'history': history,
@@ -124,32 +140,44 @@ class SupabaseStore:
     def _initialize_supabase(self) -> dict[str, Any]:
         '''Initialize Supabase with default state'''
         try:
-            # Create initial snapshot
-            initial_snapshot = {
-                'id': str(uuid4()),
-                'label': 'Workspace initialized',
-                'created_at': utc_now(),
-                'tasks': [],
-                'workspace_id': self.workspace_id
-            }
-            supabase.table('snapshots').insert({
-                'id': initial_snapshot['id'],
-                'label': initial_snapshot['label'],
-                'created_at': initial_snapshot['created_at'],
-                'tasks': json.dumps(initial_snapshot['tasks']),
-                'workspace_id': self.workspace_id
-            }).execute()
-            # Create workspace state
-            supabase.table('workspace_state').upsert({
-                'id': self.workspace_id,
-                'current_snapshot_id': initial_snapshot['id'],
-                'created_at': utc_now(),
+            # Use fixed UUID for initial snapshot (same as SQL schema)
+            initial_snapshot_id = '11111111-1111-1111-1111-111111111111'
+            
+            # Check if initial snapshot already exists (created by SQL schema)
+            snapshot_check = supabase.table('snapshots').select('*').eq('id', initial_snapshot_id).execute()
+            
+            if not snapshot_check.data:
+                # Create initial snapshot if it doesn't exist
+                initial_snapshot = {
+                    'id': initial_snapshot_id,
+                    'label': 'Workspace initialized',
+                    'created_at': utc_now(),
+                    'tasks': [],
+                    'workspace_id': self.workspace_id
+                }
+                supabase.table('snapshots').insert({
+                    'id': initial_snapshot['id'],
+                    'label': initial_snapshot['label'],
+                    'created_at': initial_snapshot['created_at'],
+                    'tasks': json.dumps(initial_snapshot['tasks']),
+                    'workspace_id': self.workspace_id
+                }).execute()
+            
+            # Update workspace state to point to initial snapshot
+            supabase.table('workspace_state').update({
+                'current_snapshot_id': initial_snapshot_id,
                 'updated_at': utc_now()
-            }).execute()
+            }).eq('id', self.workspace_id).execute()
+            
             logger.info(f"✓ Supabase workspace {self.workspace_id} initialized")
             return {
                 'tasks': [],
-                'history': [initial_snapshot],
+                'history': [{
+                    'id': initial_snapshot_id,
+                    'label': 'Workspace initialized',
+                    'created_at': utc_now(),
+                    'tasks': []
+                }],
                 'current_index': 0
             }
         except Exception as e:
@@ -168,22 +196,6 @@ class SupabaseStore:
         '''Save current state to Supabase or fallback to file'''
         if supabase:
             try:
-                # Update tasks table (clear and re-insert)
-                supabase.table('tasks').delete().eq('workspace_id', self.workspace_id).execute()
-                if state['tasks']:
-                    tasks_data = []
-                    for task in state['tasks']:
-                        tasks_data.append({
-                            'id': task['id'],
-                            'title': task['title'],
-                            'parent_id': task['parent_id'],
-                            'status': task['status'],
-                            'created_at': task['created_at'],
-                            'updated_at': task['updated_at'],
-                            'workspace_id': self.workspace_id
-                        })
-                    supabase.table('tasks').insert(tasks_data).execute()
-                    logger.debug(f"Saved {len(tasks_data)} tasks to Supabase")
                 # Update current snapshot pointer
                 if state['history'] and state['current_index'] < len(state['history']):
                     current_snapshot = state['history'][state['current_index']]
@@ -192,6 +204,7 @@ class SupabaseStore:
                         'updated_at': utc_now()
                     }).eq('id', self.workspace_id).execute()
                     logger.debug(f"Updated workspace state to snapshot {current_snapshot['id']}")
+                    logger.debug(f"Saved snapshot with {len(state['tasks'])} tasks")
             except Exception as e:
                 logger.error(f'Error saving to Supabase: {e}', exc_info=True)
                 logger.info("Falling back to file storage")
@@ -216,20 +229,23 @@ class SupabaseStore:
         }
         if supabase:
             try:
-                # Save to Supabase
-                supabase.table('snapshots').insert({
+                # Save to Supabase with proper JSON serialization
+                snapshot_data = {
                     'id': snapshot['id'],
                     'label': snapshot['label'],
                     'created_at': snapshot['created_at'],
-                    'tasks': json.dumps(snapshot['tasks']),
+                    'tasks': json.dumps(snapshot['tasks']) if snapshot['tasks'] else '[]',
                     'workspace_id': self.workspace_id
-                }).execute()
+                }
+                supabase.table('snapshots').insert(snapshot_data).execute()
+                logger.info(f"✓ Snapshot created: {label} with {len(snapshot['tasks'])} tasks")
+                
                 # Update workspace pointer
                 supabase.table('workspace_state').update({
                     'current_snapshot_id': snapshot['id'],
                     'updated_at': utc_now()
                 }).eq('id', self.workspace_id).execute()
-                logger.debug(f"✓ Snapshot created: {label}")
+                logger.debug(f"✓ Workspace state updated to snapshot {snapshot['id']}")
             except Exception as e:
                 logger.error(f'Error saving snapshot to Supabase: {e}', exc_info=True)
         # Update local history
@@ -371,12 +387,38 @@ class TaskManager:
     def travel_to_state(index: int) -> dict[str, Any] | None:
         state = TaskManager.get_state()
         history = state['history']
-        if index < 0 or index >= len(history):
+        
+        # Validate index bounds
+        if not history:
+            logger.warning("No history available")
             return None
+        
+        if index < 0 or index >= len(history):
+            logger.warning(f"Invalid index {index}, valid range is 0-{len(history)-1}")
+            return None
+        
         snapshot = history[index]
+        
+        # Safely deserialize tasks
+        tasks = snapshot.get('tasks', [])
+        if isinstance(tasks, str):
+            try:
+                tasks = json.loads(tasks)
+            except (json.JSONDecodeError, TypeError):
+                logger.error(f"Failed to deserialize tasks from snapshot {snapshot['id']}")
+                tasks = []
+        elif tasks is None:
+            tasks = []
+        
+        # Ensure tasks is a list
+        if not isinstance(tasks, list):
+            logger.warning(f"Tasks is not a list: {type(tasks)}")
+            tasks = []
+        
         state['current_index'] = index
-        state['tasks'] = clone_tasks(snapshot['tasks']) if isinstance(snapshot['tasks'], list) else clone_tasks(json.loads(snapshot['tasks']))
+        state['tasks'] = clone_tasks(tasks)
         store.save(state)
+        
         return {
             'index': index,
             'snapshot': {
@@ -463,14 +505,28 @@ def travel_to_state():
         data = request.get_json(silent=True) or {}
         if 'index' not in data:
             return jsonify({'error': 'Index is required.'}), 400
-        index = int(data['index'])
+        
+        try:
+            index = int(data['index'])
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Index must be a valid number.'}), 400
+        
         state = TaskManager.travel_to_state(index)
         if state is None:
-            return jsonify({'error': 'Invalid index.'}), 400
+            history = TaskManager.get_history()
+            total = len(history)
+            return jsonify({
+                'error': f'Invalid index {index}. Valid range is 0-{max(0, total-1)}.',
+                'current_index': TaskManager.get_current_index(),
+                'history_length': total
+            }), 400
+        
         return jsonify(state), 200
-    except ValueError:
-        return jsonify({'error': 'Index must be a number.'}), 400
+    except ValueError as e:
+        logger.warning(f"History travel validation error: {e}")
+        return jsonify({'error': str(e)}), 400
     except Exception as exc:
+        logger.error(f"History travel error: {exc}", exc_info=True)
         return jsonify({'error': str(exc)}), 500
 @app.route('/api/undo', methods=['POST'])
 def undo():
@@ -559,4 +615,4 @@ def diagnostic():
     
     return jsonify(diagnostics), 200
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
