@@ -290,6 +290,17 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: 0.92rem;
 }
 
+.history-mode-note {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(159, 61, 47, 0.16);
+    background: rgba(248, 223, 215, 0.8);
+    color: var(--danger);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
 .history-list {
     list-style: none;
     margin: 16px 0 0;

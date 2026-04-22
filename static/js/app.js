@@ -2,6 +2,7 @@ const state = {
   tasks: [],
   history: [],
   currentIndex: 0,
+  latestIndex: 0,
   selectedTaskId: null,
 };
 
@@ -18,6 +19,7 @@ const elements = {
   historyList: document.getElementById("history-list"),
   timelineLabel: document.getElementById("timeline-label"),
   timelineTime: document.getElementById("timeline-time"),
+  historyModeNote: document.getElementById("history-mode-note"),
   statTotal: document.getElementById("stat-total"),
   statRoot: document.getElementById("stat-root"),
   statChildren: document.getElementById("stat-children"),
@@ -83,6 +85,28 @@ function showToast(message, isError = false) {
   }, 2600);
 }
 
+function isLatestSnapshot() {
+  return state.currentIndex >= state.latestIndex;
+}
+
+function applyWorkspace(workspace, preserveSelection = true) {
+  state.tasks = workspace.tasks || [];
+  state.history = workspace.history || [];
+  state.currentIndex = Number(workspace.current_index || 0);
+  state.latestIndex = Number(
+    workspace.latest_index ?? Math.max(state.history.length - 1, 0),
+  );
+
+  if (preserveSelection && state.selectedTaskId) {
+    const stillExists = state.tasks.some((task) => task.id === state.selectedTaskId);
+    if (!stillExists) {
+      state.selectedTaskId = null;
+    }
+  }
+
+  renderAll();
+}
+
 function buildParentOptions(select, selectedValue, currentTaskId = null) {
   const currentMap = taskMap();
   const invalidIds = new Set([currentTaskId]);
@@ -126,6 +150,30 @@ function renderStats() {
   elements.statRoot.textContent = String(rootCount);
   elements.statChildren.textContent = String(state.tasks.length - rootCount);
   elements.statSnapshot.textContent = `${state.currentIndex + 1} / ${state.history.length}`;
+}
+
+function renderHistoryMode() {
+  const viewingPast = !isLatestSnapshot();
+  const message = viewingPast
+    ? "Viewing an older snapshot. Move to the latest snapshot to create, edit, or delete tasks."
+    : "";
+
+  elements.historyModeNote.textContent = message;
+  elements.historyModeNote.classList.toggle("hidden", !viewingPast);
+
+  const createDisabled = viewingPast;
+  const editDisabled = viewingPast || !state.selectedTaskId;
+
+  elements.titleInput.disabled = createDisabled;
+  elements.parentSelect.disabled = createDisabled;
+  elements.statusSelect.disabled = createDisabled;
+  elements.createForm.querySelector('button[type="submit"]').disabled = createDisabled;
+
+  elements.editTitle.disabled = editDisabled;
+  elements.editParent.disabled = editDisabled;
+  elements.editStatus.disabled = editDisabled;
+  elements.deleteButton.disabled = editDisabled;
+  elements.editForm.querySelector('button[type="submit"]').disabled = editDisabled;
 }
 
 function renderHistory() {
@@ -234,32 +282,19 @@ function renderAll() {
   renderHistory();
   renderTasks();
   renderInspector();
+  renderHistoryMode();
 }
 
 async function refreshWorkspace(preserveSelection = true) {
-  const [taskPayload, historyPayload] = await Promise.all([
-    api("/api/tasks"),
-    api("/api/history"),
-  ]);
-
-  state.tasks = taskPayload.tasks;
-  state.history = historyPayload.history;
-  state.currentIndex = historyPayload.current_index;
-
-  if (preserveSelection && state.selectedTaskId) {
-    const stillExists = state.tasks.some((task) => task.id === state.selectedTaskId);
-    if (!stillExists) {
-      state.selectedTaskId = null;
-    }
-  }
-
-  renderAll();
+  const workspace = await api("/api/workspace");
+  applyWorkspace(workspace, preserveSelection);
 }
 
 function selectTask(taskId) {
   state.selectedTaskId = taskId;
   renderTasks();
   renderInspector();
+  renderHistoryMode();
 }
 
 async function navigateTo(index) {
@@ -268,7 +303,11 @@ async function navigateTo(index) {
       method: "POST",
       body: JSON.stringify({ index }),
     });
-    await refreshWorkspace();
+    if (response.workspace) {
+      applyWorkspace(response.workspace);
+    } else {
+      await refreshWorkspace();
+    }
     return true;
   } catch (error) {
     // Don't call refreshWorkspace on error - state hasn't changed
@@ -288,6 +327,10 @@ elements.createForm.addEventListener("submit", async (event) => {
     showToast("A title is required.", true);
     return;
   }
+  if (!isLatestSnapshot()) {
+    showToast("Move to the latest snapshot before creating a task.", true);
+    return;
+  }
 
   try {
     const response = await api("/api/tasks", {
@@ -296,7 +339,11 @@ elements.createForm.addEventListener("submit", async (event) => {
     });
     elements.createForm.reset();
     state.selectedTaskId = response.task.id;
-    await refreshWorkspace();
+    if (response.workspace) {
+      applyWorkspace(response.workspace);
+    } else {
+      await refreshWorkspace();
+    }
     showToast("Task created.");
   } catch (error) {
     showToast(error.message, true);
@@ -308,9 +355,13 @@ elements.editForm.addEventListener("submit", async (event) => {
   if (!state.selectedTaskId) {
     return;
   }
+  if (!isLatestSnapshot()) {
+    showToast("Move to the latest snapshot before editing a task.", true);
+    return;
+  }
 
   try {
-    await api(`/api/tasks/${state.selectedTaskId}`, {
+    const response = await api(`/api/tasks/${state.selectedTaskId}`, {
       method: "PATCH",
       body: JSON.stringify({
         title: elements.editTitle.value.trim(),
@@ -318,7 +369,11 @@ elements.editForm.addEventListener("submit", async (event) => {
         status: elements.editStatus.value,
       }),
     });
-    await refreshWorkspace();
+    if (response.workspace) {
+      applyWorkspace(response.workspace);
+    } else {
+      await refreshWorkspace();
+    }
     showToast("Task updated.");
   } catch (error) {
     showToast(error.message, true);
@@ -329,13 +384,21 @@ elements.deleteButton.addEventListener("click", async () => {
   if (!state.selectedTaskId) {
     return;
   }
+  if (!isLatestSnapshot()) {
+    showToast("Move to the latest snapshot before deleting a task.", true);
+    return;
+  }
 
   try {
-    await api(`/api/tasks/${state.selectedTaskId}`, {
+    const response = await api(`/api/tasks/${state.selectedTaskId}`, {
       method: "DELETE",
     });
     state.selectedTaskId = null;
-    await refreshWorkspace(false);
+    if (response.workspace) {
+      applyWorkspace(response.workspace, false);
+    } else {
+      await refreshWorkspace(false);
+    }
     showToast("Task subtree deleted.");
   } catch (error) {
     showToast(error.message, true);
@@ -344,8 +407,12 @@ elements.deleteButton.addEventListener("click", async () => {
 
 elements.undoButton.addEventListener("click", async () => {
   try {
-    await api("/api/undo", { method: "POST", body: JSON.stringify({}) });
-    await refreshWorkspace();
+    const response = await api("/api/undo", { method: "POST", body: JSON.stringify({}) });
+    if (response.workspace) {
+      applyWorkspace(response.workspace);
+    } else {
+      await refreshWorkspace();
+    }
     showToast("Moved one snapshot back.");
   } catch (error) {
     showToast(error.message, true);
@@ -354,8 +421,12 @@ elements.undoButton.addEventListener("click", async () => {
 
 elements.redoButton.addEventListener("click", async () => {
   try {
-    await api("/api/redo", { method: "POST", body: JSON.stringify({}) });
-    await refreshWorkspace();
+    const response = await api("/api/redo", { method: "POST", body: JSON.stringify({}) });
+    if (response.workspace) {
+      applyWorkspace(response.workspace);
+    } else {
+      await refreshWorkspace();
+    }
     showToast("Moved one snapshot forward.");
   } catch (error) {
     showToast(error.message, true);
@@ -364,9 +435,13 @@ elements.redoButton.addEventListener("click", async () => {
 
 elements.resetButton.addEventListener("click", async () => {
   try {
-    await api("/api/init", { method: "POST", body: JSON.stringify({}) });
+    const response = await api("/api/init", { method: "POST", body: JSON.stringify({}) });
     state.selectedTaskId = null;
-    await refreshWorkspace(false);
+    if (response.workspace) {
+      applyWorkspace(response.workspace, false);
+    } else {
+      await refreshWorkspace(false);
+    }
     showToast("Workspace reset.");
   } catch (error) {
     showToast(error.message, true);
@@ -394,6 +469,9 @@ elements.slider.addEventListener("input", async (event) => {
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     await refreshWorkspace(false);
+    if (!isLatestSnapshot()) {
+      await navigateTo(state.latestIndex);
+    }
   } catch (error) {
     showToast(error.message, true);
   }

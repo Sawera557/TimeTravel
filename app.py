@@ -34,11 +34,11 @@ CORS(app)
 def add_cache_headers(response):
     """Add cache headers for static files"""
     if response.status_code == 200:
-        # Set cache for static files (CSS, JS): 1 day for development, 30 days for production
+        # This app serves unhashed assets, so force revalidation to avoid stale JS/CSS in production.
         if request.path.startswith('/static/'):
-            cache_duration = 86400 if not is_production else 2592000
-            response.headers['Cache-Control'] = f'public, max-age={cache_duration}'
-            response.headers['ETag'] = response.get_etag()[0] if response.get_etag() else None
+            response.headers['Cache-Control'] = 'public, no-cache, max-age=0, must-revalidate'
+        elif request.path == '/' or request.path.startswith('/api/'):
+            response.headers['Cache-Control'] = 'no-store'
     return response
 
 # Supabase configuration
@@ -280,6 +280,33 @@ class TaskManager:
     def get_all_tasks() -> list[dict[str, Any]]:
         return TaskManager.get_state()['tasks']
     @staticmethod
+    def _build_history_payload(history: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        return [
+            {
+                'id': item['id'],
+                'label': item['label'],
+                'created_at': item['created_at'],
+                'task_count': len(item['tasks']) if isinstance(item['tasks'], list) else len(json.loads(item['tasks'])),
+            }
+            for item in history
+        ]
+    @staticmethod
+    def build_workspace_payload(state: dict[str, Any]) -> dict[str, Any]:
+        tasks = sorted(clone_tasks(state['tasks']), key=lambda item: item['created_at'])
+        history = TaskManager._build_history_payload(state['history'])
+        current_index = state['current_index']
+        return {
+            'tasks': tasks,
+            'history': history,
+            'current_index': current_index,
+            'latest_index': max(len(history) - 1, 0),
+            'total': len(history),
+            'strategy': 'cascade_delete',
+        }
+    @staticmethod
+    def get_workspace() -> dict[str, Any]:
+        return TaskManager.build_workspace_payload(TaskManager.get_state())
+    @staticmethod
     def _save_snapshot(state: dict[str, Any], label: str) -> dict[str, Any]:
         return store.save_snapshot(state, label)
     @staticmethod
@@ -371,15 +398,7 @@ class TaskManager:
     @staticmethod
     def get_history() -> list[dict[str, Any]]:
         history = TaskManager.get_state()['history']
-        return [
-            {
-                'id': item['id'],
-                'label': item['label'],
-                'created_at': item['created_at'],
-                'task_count': len(item['tasks']) if isinstance(item['tasks'], list) else len(json.loads(item['tasks'])),
-            }
-            for item in history
-        ]
+        return TaskManager._build_history_payload(history)
     @staticmethod
     def get_current_index() -> int:
         return TaskManager.get_state()['current_index']
@@ -446,6 +465,9 @@ def index() -> str:
 def get_tasks():
     tasks = sorted(TaskManager.get_all_tasks(), key=lambda item: item['created_at'])
     return jsonify({'tasks': tasks, 'strategy': 'cascade_delete'}), 200
+@app.route('/api/workspace', methods=['GET'])
+def get_workspace():
+    return jsonify(TaskManager.get_workspace()), 200
 @app.route('/api/tasks', methods=['POST'])
 def create_task():
     try:
@@ -461,7 +483,7 @@ def create_task():
             return jsonify({'error': 'Invalid status.'}), 400
         task = TaskManager.create_task(title, parent_id, status)
         logger.info(f"✓ Task created: {task['id']}")
-        return jsonify({'task': task}), 201
+        return jsonify({'task': task, 'workspace': TaskManager.get_workspace()}), 201
     except ValueError as exc:
         logger.warning(f"Task creation validation error: {exc}")
         return jsonify({'error': str(exc)}), 400
@@ -473,7 +495,7 @@ def update_task(task_id: str):
     try:
         data = request.get_json(silent=True) or {}
         task = TaskManager.update_task(task_id, data)
-        return jsonify({'task': task}), 200
+        return jsonify({'task': task, 'workspace': TaskManager.get_workspace()}), 200
     except LookupError as exc:
         return jsonify({'error': str(exc)}), 404
     except ValueError as exc:
@@ -484,7 +506,7 @@ def update_task(task_id: str):
 def delete_task(task_id: str):
     try:
         result = TaskManager.delete_task(task_id)
-        return jsonify(result), 200
+        return jsonify({**result, 'workspace': TaskManager.get_workspace()}), 200
     except LookupError as exc:
         return jsonify({'error': str(exc)}), 404
     except Exception as exc:
@@ -496,6 +518,7 @@ def get_history():
         {
             'history': history,
             'current_index': TaskManager.get_current_index(),
+            'latest_index': max(len(history) - 1, 0),
             'total': len(history),
         }
     ), 200
@@ -521,7 +544,7 @@ def travel_to_state():
                 'history_length': total
             }), 400
         
-        return jsonify(state), 200
+        return jsonify({**state, 'workspace': TaskManager.get_workspace()}), 200
     except ValueError as e:
         logger.warning(f"History travel validation error: {e}")
         return jsonify({'error': str(e)}), 400
@@ -533,17 +556,17 @@ def undo():
     state = TaskManager.undo()
     if state is None:
         return jsonify({'error': 'Cannot undo.'}), 400
-    return jsonify(state), 200
+    return jsonify({**state, 'workspace': TaskManager.get_workspace()}), 200
 @app.route('/api/redo', methods=['POST'])
 def redo():
     state = TaskManager.redo()
     if state is None:
         return jsonify({'error': 'Cannot redo.'}), 400
-    return jsonify(state), 200
+    return jsonify({**state, 'workspace': TaskManager.get_workspace()}), 200
 @app.route('/api/init', methods=['POST'])
 def initialize():
     state = TaskManager.initialize()
-    return jsonify({'message': 'Workspace reset.', 'state': state}), 200
+    return jsonify({'message': 'Workspace reset.', 'state': state, 'workspace': TaskManager.get_workspace()}), 200
 @app.route('/health', methods=['GET'])
 def health():
     supabase_status = 'unavailable'
