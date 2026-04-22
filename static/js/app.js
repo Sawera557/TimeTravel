@@ -171,25 +171,11 @@ function renderStats() {
 function renderHistoryMode() {
   const viewingPast = !isLatestSnapshot();
   const message = viewingPast
-    ? "Viewing an older snapshot. Move to the latest snapshot to create, edit, or delete tasks."
+    ? "Timeline selection is for history reference only. The task board always shows the latest full workspace."
     : "";
 
   elements.historyModeNote.textContent = message;
   elements.historyModeNote.classList.toggle("hidden", !viewingPast);
-
-  const createDisabled = viewingPast;
-  const editDisabled = viewingPast || !state.selectedTaskId;
-
-  elements.titleInput.disabled = createDisabled;
-  elements.parentSelect.disabled = createDisabled;
-  elements.statusSelect.disabled = createDisabled;
-  elements.createForm.querySelector('button[type="submit"]').disabled = createDisabled;
-
-  elements.editTitle.disabled = editDisabled;
-  elements.editParent.disabled = editDisabled;
-  elements.editStatus.disabled = editDisabled;
-  elements.deleteButton.disabled = editDisabled;
-  elements.editForm.querySelector('button[type="submit"]').disabled = editDisabled;
 }
 
 function renderHistory() {
@@ -314,21 +300,12 @@ function selectTask(taskId) {
 }
 
 async function navigateTo(index) {
-  try {
-    const response = await api("/api/history/travel", {
-      method: "POST",
-      body: JSON.stringify({ index }),
-    });
-    if (response.workspace) {
-      applyWorkspace(response.workspace);
-    } else {
-      await refreshWorkspace();
-    }
-    return true;
-  } catch (error) {
-    // Don't call refreshWorkspace on error - state hasn't changed
-    throw error;
-  }
+  const maxIndex = Math.max(state.history.length - 1, 0);
+  state.currentIndex = Math.max(0, Math.min(Number(index) || 0, maxIndex));
+  renderStats();
+  renderHistory();
+  renderHistoryMode();
+  return true;
 }
 
 elements.createForm.addEventListener("submit", async (event) => {
@@ -341,10 +318,6 @@ elements.createForm.addEventListener("submit", async (event) => {
 
   if (!payload.title) {
     showToast("A title is required.", true);
-    return;
-  }
-  if (!isLatestSnapshot()) {
-    showToast("Move to the latest snapshot before creating a task.", true);
     return;
   }
 
@@ -369,10 +342,6 @@ elements.createForm.addEventListener("submit", async (event) => {
 elements.editForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!state.selectedTaskId) {
-    return;
-  }
-  if (!isLatestSnapshot()) {
-    showToast("Move to the latest snapshot before editing a task.", true);
     return;
   }
 
@@ -405,10 +374,6 @@ elements.editForm.addEventListener("submit", async (event) => {
 
 elements.deleteButton.addEventListener("click", async () => {
   if (!state.selectedTaskId) {
-    return;
-  }
-  if (!isLatestSnapshot()) {
-    showToast("Move to the latest snapshot before deleting a task.", true);
     return;
   }
 

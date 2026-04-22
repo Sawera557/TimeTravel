@@ -444,21 +444,27 @@ class TaskManager:
             logger.warning("No history available")
             return None
         
-        if index < 0 or index >= len(history):
-            logger.warning(f"Invalid index {index}, valid range is 0-{len(history)-1}")
-            return None
+        clamped_index = max(0, min(index, len(history) - 1))
+        if clamped_index != index:
+            logger.info(
+                "Clamped history index %s to %s (valid range 0-%s)",
+                index,
+                clamped_index,
+                len(history) - 1,
+            )
         
-        snapshot = history[index]
+        snapshot = history[clamped_index]
         
         tasks = TaskManager._deserialize_snapshot_tasks(snapshot)
         snapshot_state = {
             'tasks': tasks,
             'history': history,
-            'current_index': index,
+            'current_index': clamped_index,
         }
         
         return {
-            'index': index,
+            'index': clamped_index,
+            'requested_index': index,
             'snapshot': {
                 'id': snapshot['id'],
                 'label': snapshot['label'],
